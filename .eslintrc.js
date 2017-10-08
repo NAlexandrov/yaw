@@ -11,6 +11,7 @@ module.exports = {
   rules: {
     strict: 0,
     "no-underscore-dangle": [2, { "allowAfterThis": true }],
+    "import/prefer-default-export": 0,
   },
   globals: {
     expect: true,
