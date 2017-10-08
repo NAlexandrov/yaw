@@ -29,7 +29,7 @@ class Transactions extends FileModel {
    * @return {Promise.<Object[]>}
    */
   async getByCard(cardId) {
-    return this._dataSource.filter(transaction => transaction.cardId === cardId);
+    return this._dataSource.filter((transaction) => transaction.cardId === cardId);
   }
 
   /**

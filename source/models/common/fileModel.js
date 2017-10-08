@@ -36,7 +36,7 @@ class FileModel extends Model {
   }
 
   async get(id) {
-    return this._dataSource.find(item => item.id === id);
+    return this._dataSource.find((item) => item.id === id);
   }
 
   /**

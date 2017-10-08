@@ -20,7 +20,7 @@ module.exports = async (ctx) => {
 
   transaction.cardId = cardId;
 
-  const missingFields = requiredFields.filter(field => !has.call(transaction, field));
+  const missingFields = requiredFields.filter((field) => !has.call(transaction, field));
 
   if (missingFields.length) {
     throw new ApplicationError(`No required fields: ${missingFields.join()}`, 400);

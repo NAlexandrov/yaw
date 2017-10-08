@@ -1,5 +1,6 @@
 'use strict';
 
+const fs = require('fs');
 const router = require('koa-router')();
 
 const getCardsController = require('./controllers/cards/get-cards');
@@ -12,7 +13,7 @@ const createTransactionsController = require('./controllers/transactions/create'
 const errorController = require('./controllers/error.js');
 
 router.get('/', (ctx) => {
-  ctx.body = 'koa started';
+  ctx.body = fs.readFileSync('./public/index.html', 'utf8');
 });
 
 router.get('/cards/', getCardsController);
