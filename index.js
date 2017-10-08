@@ -1,9 +1,11 @@
 'use strict';
 
+const appCfg = require('rc')('yaw', {
+  port: 3000,
+});
+
 const app = require('./source/app.js');
 
-const PORT = 3000;
-
-app.listen(PORT, () => {
-  console.log(`Yet another wallet started at port: ${PORT}`);
+app.listen(appCfg.port, () => {
+  console.log(`Yet another wallet started at port: ${appCfg.port}`);
 });
