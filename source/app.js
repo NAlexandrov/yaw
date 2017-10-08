@@ -4,9 +4,11 @@ const path = require('path');
 const Koa = require('koa');
 const bodyParser = require('koa-bodyparser')();
 const serve = require('koa-static');
+
 const router = require('./routes.js');
 const ApplicationError = require('../libs/application-error.js');
 const CardsModel = require('./models/cards');
+const TransactionsModel = require('./models/transactions');
 
 const app = new Koa();
 
@@ -34,7 +36,13 @@ app.use(async (ctx, next) => {
 // Создадим модель Cards и Transactions на уровне приложения и проинициализируем ее
 app.use(async (ctx, next) => {
   ctx.cardsModel = new CardsModel();
-  await ctx.cardsModel.loadFile();
+  ctx.transactionsModel = new TransactionsModel();
+
+  await Promise.all([
+    ctx.cardsModel.loadFile(),
+    ctx.transactionsModel.loadFile(),
+  ]);
+
   await next();
 });
 
