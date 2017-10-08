@@ -7,7 +7,6 @@
     "build": "./node_modules/.bin/webpack",
     "lint": "./node_modules/.bin/eslint .",
     "precommit": "npm run lint",
-    "prepush": "npm run lint",
     "start": "node index.js",
     "watch": "nodemon --watch source index.js",
     "test": "jest"
