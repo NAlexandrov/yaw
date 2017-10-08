@@ -1,7 +1,7 @@
 'use strict';
 
-const fs = require('fs');
 const router = require('koa-router')();
+const { renderToStaticMarkup } = require('react-dom/server');
 
 const getCardsController = require('./controllers/cards/get-cards');
 const createCardController = require('./controllers/cards/create');
@@ -11,9 +11,19 @@ const getTransactionsController = require('./controllers/transactions/get');
 const createTransactionsController = require('./controllers/transactions/create');
 
 const errorController = require('./controllers/error.js');
+const indexView = require('./views/index.server.js');
+
+const DATA = {
+  user: {
+    login: 'samuel_johnson',
+    name: 'Samuel Johnson'
+  }
+};
 
 router.get('/', (ctx) => {
-  ctx.body = fs.readFileSync('./public/index.html', 'utf8');
+  const indexViewHtml = renderToStaticMarkup(indexView(DATA));
+
+  ctx.body = indexViewHtml;
 });
 
 router.get('/cards/', getCardsController);
