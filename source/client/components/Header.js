@@ -35,9 +35,9 @@ const Header = ({ activeCard, user }) => (
 Header.propTypes = {
   activeCard: PropTypes.shape({
     bankName: PropTypes.string.isRequired,
-    balance: PropTypes.string.isRequired
+    balance: PropTypes.string.isRequired,
   }),
-  user: PropTypes.object // eslint-disable-line react/forbid-prop-types
+  user: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
 export default Header;

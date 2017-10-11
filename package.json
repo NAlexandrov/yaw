@@ -4,11 +4,11 @@
   "description": "Yet another wallet",
   "main": "index.js",
   "scripts": {
-    "build": "./node_modules/.bin/webpack",
-    "lint": "./node_modules/.bin/eslint .",
+    "build": "npx webpack",
+    "lint": "npx eslint .",
     "precommit": "npm run lint",
     "start": "node index.js",
-    "watch": "nodemon --watch source index.js",
+    "watch": "nodemon --watch source index.js | npx bunyan",
     "test": "jest"
   },
   "repository": {
@@ -25,6 +25,7 @@
     "node": "^8.2"
   },
   "dependencies": {
+    "bunyan": "^1.8.12",
     "koa": "^2.3.0",
     "koa-bodyparser": "^4.2.0",
     "koa-router": "^7.2.1",

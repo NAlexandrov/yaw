@@ -48,7 +48,7 @@ class Withdraw extends Component {
     this.state = {
       // eslint-disable-next-line
       selectedCard: props.inactiveCardsList[0],
-      sum: 0
+      sum: 0,
     };
   }
 
@@ -64,7 +64,7 @@ class Withdraw extends Component {
     const { name, value } = event.target;
 
     this.setState({
-      [name]: value
+      [name]: value,
     });
   }
 
@@ -117,9 +117,9 @@ Withdraw.propTypes = {
   // eslint-disable-next-line
   activeCard: PropTypes.shape({
     id: PropTypes.number,
-    theme: PropTypes.object
+    theme: PropTypes.object,
   }).isRequired,
-  inactiveCardsList: PropTypes.arrayOf(PropTypes.object).isRequired
+  inactiveCardsList: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default Withdraw;

@@ -121,7 +121,7 @@ const History = ({ cardHistory }) => {
 };
 
 History.propTypes = {
-  cardHistory: PropTypes.arrayOf(PropTypes.object).isRequired
+  cardHistory: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default History;

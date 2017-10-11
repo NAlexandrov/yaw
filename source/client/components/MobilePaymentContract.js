@@ -80,7 +80,7 @@ class MobilePaymentContract extends Component {
     this.state = {
       phoneNumber: '+79218908064',
       sum: 0,
-      commission: 3
+      commission: 3,
     };
   }
 
@@ -130,7 +130,7 @@ class MobilePaymentContract extends Component {
     const { name, value } = event.target;
 
     this.setState({
-      [name]: value
+      [name]: value,
     });
   }
 
@@ -180,9 +180,9 @@ MobilePaymentContract.propTypes = {
   // eslint-disable-next-line
   activeCard: PropTypes.shape({
     id: PropTypes.number,
-    theme: PropTypes.object
+    theme: PropTypes.object,
   }).isRequired,
-  onPaymentSuccess: PropTypes.func.isRequired
+  onPaymentSuccess: PropTypes.func.isRequired,
 };
 
 export default MobilePaymentContract;

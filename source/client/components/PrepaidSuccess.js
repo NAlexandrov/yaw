@@ -90,9 +90,9 @@ const PrepaidSuccess = ({ transaction, repeatPayment }) => {
 PrepaidSuccess.propTypes = {
   transaction: PropTypes.shape({
     sum: PropTypes.string,
-    number: PropTypes.string
+    number: PropTypes.string,
   }).isRequired,
-  repeatPayment: PropTypes.func.isRequired
+  repeatPayment: PropTypes.func.isRequired,
 };
 
 export default PrepaidSuccess;

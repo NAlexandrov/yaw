@@ -21,7 +21,7 @@ const StyledButton = styled.button`
 `;
 
 const Button = ({
-  bgColor, textColor, children, className
+  bgColor, textColor, children, className,
 }) => (
   <StyledButton bgColor={bgColor} textColor={textColor} className={className}>{children}</StyledButton>
 );
@@ -30,7 +30,7 @@ Button.propTypes = {
   bgColor: PropTypes.string,
   textColor: PropTypes.string,
   children: PropTypes.node,
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default Button;

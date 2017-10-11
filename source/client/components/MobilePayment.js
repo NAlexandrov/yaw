@@ -25,7 +25,7 @@ class MobilePayment extends Component {
   onPaymentSuccess(transaction) {
     this.setState({
       stage: 'success',
-      transaction
+      transaction,
     });
   }
 
@@ -65,8 +65,8 @@ class MobilePayment extends Component {
 MobilePayment.propTypes = {
   activeCard: PropTypes.shape({
     id: PropTypes.number,
-    theme: PropTypes.object
-  }).isRequired
+    theme: PropTypes.object,
+  }).isRequired,
 };
 
 export default MobilePayment;

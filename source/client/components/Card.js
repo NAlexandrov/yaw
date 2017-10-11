@@ -66,7 +66,7 @@ class Card extends Component {
     super(props);
 
     this.state = {
-      activeCardIndex: 0
+      activeCardIndex: 0,
     };
   }
 
@@ -87,7 +87,7 @@ class Card extends Component {
    */
   render() {
     const {
-      data, type, active, onClick
+      data, type, active, onClick,
     } = this.props;
 
     if (type === 'new') {
@@ -116,7 +116,7 @@ class Card extends Component {
 
     const { number, theme } = data;
     const {
-      bgColor, textColor, bankLogoUrl, brandLogoUrl
+      bgColor, textColor, bankLogoUrl, brandLogoUrl,
     } = theme;
     const themedBrandLogoUrl = active ? brandLogoUrl : brandLogoUrl.replace(/-colored.svg$/, '-white.svg');
 
@@ -136,7 +136,7 @@ Card.propTypes = {
   data: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   type: PropTypes.string,
   active: PropTypes.bool,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
 };
 
 export default Card;

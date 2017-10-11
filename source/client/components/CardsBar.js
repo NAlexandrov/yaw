@@ -61,7 +61,7 @@ const CardsBar = ({ activeCardIndex, cardsList, onCardChange }) => {
 CardsBar.propTypes = {
   cardsList: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   activeCardIndex: PropTypes.number.isRequired,
-  onCardChange: PropTypes.func.isRequired
+  onCardChange: PropTypes.func.isRequired,
 };
 
 export default CardsBar;

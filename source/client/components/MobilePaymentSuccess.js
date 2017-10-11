@@ -100,9 +100,9 @@ MobilePaymentSuccess.propTypes = {
   transaction: PropTypes.shape({
     sum: PropTypes.string,
     phoneNumber: PropTypes.string,
-    commission: PropTypes.number
+    commission: PropTypes.number,
   }).isRequired,
-  repeatPayment: PropTypes.func.isRequired
+  repeatPayment: PropTypes.func.isRequired,
 };
 
 export default MobilePaymentSuccess;

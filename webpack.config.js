@@ -7,43 +7,43 @@ function getExternals() {
     .concat(['react-dom/server'])
     .filter((mod) => mod !== '.bin')
     .reduce((externals, mod) => Object.assign({}, externals, {
-      [mod]: `commonjs ${mod}`
+      [mod]: `commonjs ${mod}`,
     }), {});
 }
 
 module.exports = [
   {
     entry: {
-      index: './source/views/index.src.js'
+      index: './source/views/index.src.js',
     },
     module: {
       rules: [
         {
           test: /\.js$/,
           exclude: /node_modules/,
-          loader: 'babel-loader'
+          loader: 'babel-loader',
         },
         {
           test: /\.css$/,
           loader: ExtractTextPlugin.extract({
             fallback: 'style-loader',
-            use: 'css-loader'
-          })
-        }
-      ]
+            use: 'css-loader',
+          }),
+        },
+      ],
     },
     output: {
       filename: '[name].js',
-      path: path.resolve(__dirname, 'public')
+      path: path.resolve(__dirname, 'public'),
     },
     plugins: [
-      new ExtractTextPlugin('[name].css')
+      new ExtractTextPlugin('[name].css'),
     ],
-    watch: true
+    watch: true,
   },
   {
     entry: {
-      index: './source/views/index.server.src.js'
+      index: './source/views/index.server.src.js',
     },
     target: 'node',
     externals: getExternals(),
@@ -52,19 +52,19 @@ module.exports = [
         {
           test: /\.js$/,
           exclude: /node_modules/,
-          loader: 'babel-loader'
+          loader: 'babel-loader',
         },
         {
           test: /\.css$/,
-          loader: 'ignore-loader'
-        }
-      ]
+          loader: 'ignore-loader',
+        },
+      ],
     },
     output: {
       filename: '[name].server.js',
       path: path.resolve(__dirname, 'source/views'),
-      libraryTarget: 'umd'
+      libraryTarget: 'umd',
     },
-    watch: true
-  }
+    watch: true,
+  },
 ];

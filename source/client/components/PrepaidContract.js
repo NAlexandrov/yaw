@@ -83,7 +83,7 @@ class PrepaidContract extends Component {
 
     this.state = {
       activeCardIndex: 0,
-      sum: 0
+      sum: 0,
     };
   }
 
@@ -107,7 +107,7 @@ class PrepaidContract extends Component {
     const { name, value } = event.target;
 
     this.setState({
-      [name]: value
+      [name]: value,
     });
   }
 
@@ -130,7 +130,7 @@ class PrepaidContract extends Component {
 
     this.props.onPaymentSuccess({
       sum,
-      number: activeCard.number
+      number: activeCard.number,
     });
   }
 
@@ -197,10 +197,10 @@ class PrepaidContract extends Component {
 PrepaidContract.propTypes = {
   activeCard: PropTypes.shape({
     id: PropTypes.number,
-    theme: PropTypes.object
+    theme: PropTypes.object,
   }).isRequired,
   inactiveCardsList: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onPaymentSuccess: PropTypes.func.isRequired
+  onPaymentSuccess: PropTypes.func.isRequired,
 };
 
 export default PrepaidContract;

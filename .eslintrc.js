@@ -1,5 +1,3 @@
-// .eslintrc is deprecated. http://eslint.org/docs/user-guide/configuring
-
 module.exports = {
   root: true,
   extends: 'airbnb',
@@ -10,7 +8,6 @@ module.exports = {
   },
   rules: {
     "strict": 0,
-    "comma-dangle": 0,
     "no-tabs": 0,
     "arrow-parens": [2, "always"],
     "no-underscore-dangle": [2, { "allowAfterThis": true }],

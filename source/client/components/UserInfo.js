@@ -33,12 +33,12 @@ const UserInfo = ({ user }) => {
 UserInfo.propTypes = {
   user: PropTypes.shape({
     login: PropTypes.string,
-    name: PropTypes.string
-  })
+    name: PropTypes.string,
+  }),
 };
 
 UserInfo.defaultProps = {
-  user: {}
+  user: {},
 };
 
 export default UserInfo;

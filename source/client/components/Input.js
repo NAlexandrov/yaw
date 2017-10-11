@@ -21,7 +21,7 @@ const Input = (props) => (
 
 Input.propTypes = {
   textColor: PropTypes.string,
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default Input;

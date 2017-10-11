@@ -1,6 +1,15 @@
 'use strict';
 
+const appCfg = require('../../../config.js');
+const log = require('../../../libs/logger.js')(appCfg);
+
 class Model {
+  constructor() {
+    this.log = log.child({
+      component: 'model',
+    });
+  }
+
   /**
    * Возвращает список всех объектов
    * @returns {Promise.<void>}
