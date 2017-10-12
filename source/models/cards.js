@@ -6,8 +6,11 @@ const FileModel = require('./common/fileModel');
 const has = Object.prototype.hasOwnProperty;
 
 class Cards extends FileModel {
-  constructor() {
-    super('cards.json');
+  constructor(config) {
+    super(Object.assign(config, {
+      sourceFileName: 'cards.json',
+    }));
+
     this.log = this.log.child({
       modelName: 'Cards',
     });

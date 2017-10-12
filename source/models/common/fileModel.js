@@ -11,8 +11,9 @@ const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 
 class FileModel extends Model {
-  constructor(sourceFileName) {
-    super();
+  constructor(config) {
+    super(config);
+    const { sourceFileName } = config;
     this._dataSourceFile = path.join(__dirname, '..', '..', 'data', sourceFileName);
     this._dataSource = null;
     this.log = this.log.child({

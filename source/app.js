@@ -4,6 +4,7 @@ const path = require('path');
 const Koa = require('koa');
 const bodyParser = require('koa-bodyparser')();
 const serve = require('koa-static');
+const uuidv4 = require('uuid/v4');
 
 const router = require('./routes.js');
 const ApplicationError = require('../libs/application-error.js');
@@ -13,8 +14,10 @@ const TransactionsModel = require('./models/transactions');
 const app = new Koa();
 
 module.exports = (appCfg, log) => {
+  // init logger with request id
   app.use(async (ctx, next) => {
-    ctx.log = log;
+    ctx.id = uuidv4();
+    ctx.log = log.child({ req_id: ctx.id });
     await next();
   });
 
@@ -23,7 +26,7 @@ module.exports = (appCfg, log) => {
     const start = process.hrtime();
     await next();
     const end = process.hrtime(start);
-    log.info({
+    ctx.log.trace({
       method: ctx.method,
       url: ctx.url,
       status: ctx.status,
@@ -36,7 +39,7 @@ module.exports = (appCfg, log) => {
     try {
       await next();
     } catch (err) {
-      log.error(err);
+      ctx.log.error(err);
       ctx.status = err instanceof ApplicationError ? err.status : 500;
       ctx.body = {
         error: err.message,
@@ -46,8 +49,13 @@ module.exports = (appCfg, log) => {
 
   // Создадим модель Cards и Transactions на уровне приложения и проинициализируем ее
   app.use(async (ctx, next) => {
-    ctx.cardsModel = new CardsModel();
-    ctx.transactionsModel = new TransactionsModel();
+    ctx.cardsModel = new CardsModel({
+      logger: ctx.log,
+    });
+
+    ctx.transactionsModel = new TransactionsModel({
+      logger: ctx.log,
+    });
 
     await Promise.all([
       ctx.cardsModel.loadFile(),

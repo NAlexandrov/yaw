@@ -4,8 +4,14 @@ const ApplicationError = require('../../libs/application-error');
 const FileModel = require('./common/fileModel');
 
 class Transactions extends FileModel {
-  constructor() {
-    super('transactions.json');
+  constructor(config) {
+    super(Object.assign(config, {
+      sourceFileName: 'transactions.json',
+    }));
+
+    this.log = this.log.child({
+      modelName: 'Transactions',
+    });
   }
 
   /**

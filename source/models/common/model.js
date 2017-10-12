@@ -1,11 +1,8 @@
 'use strict';
 
-const appCfg = require('../../../config.js');
-const log = require('../../../libs/logger.js')(appCfg);
-
 class Model {
-  constructor() {
-    this.log = log.child({
+  constructor(config) {
+    this.log = config.logger.child({
       component: 'model',
     });
   }
