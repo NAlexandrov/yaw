@@ -4,9 +4,14 @@ const _ = require('lodash');
 const ApplicationError = require('../../../libs/application-error');
 
 module.exports = async (ctx) => {
+  const log = ctx.log.child({ controller: 'PayController', method: 'create' });
   const cardId = Number(ctx.params.id);
-  const { amount } = ctx.request.body;
-  const phone = '+7(913)2157792';
+  const { amount, phoneNumber } = ctx.request.body;
+
+  log.trace({
+    cardId,
+    body: ctx.request.body,
+  });
 
   const card = await ctx.cardsModel.get(cardId);
 
@@ -18,12 +23,16 @@ module.exports = async (ctx) => {
     throw new ApplicationError(`Amount ${amount} is not a number`, 400);
   }
 
+  if (_.isEmpty(phoneNumber)) {
+    throw new ApplicationError('No phone number', 400);
+  }
+
   const newBalance = Number(card.balance) - Number(amount);
 
   const transaction = {
     cardId,
     type: 'paymentMobile',
-    data: phone,
+    data: phoneNumber,
     time: (new Date()).toISOString(),
     sum: amount,
   };

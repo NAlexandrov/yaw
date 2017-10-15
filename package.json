@@ -25,7 +25,9 @@
     "node": "^8.2"
   },
   "dependencies": {
+    "axios": "^0.16.2",
     "bunyan": "^1.8.12",
+    "jaeger-client": "^3.5.3",
     "koa": "^2.3.0",
     "koa-bodyparser": "^4.2.0",
     "koa-router": "^7.2.1",

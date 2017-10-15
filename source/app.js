@@ -13,25 +13,32 @@ const TransactionsModel = require('./models/transactions');
 
 const app = new Koa();
 
-module.exports = (appCfg, log) => {
-  // init logger with request id
-  app.use(async (ctx, next) => {
-    ctx.id = uuidv4();
-    ctx.log = log.child({ req_id: ctx.id });
-    await next();
-  });
-
+module.exports = (appCfg, log, tracer) => {
   // logger
   app.use(async (ctx, next) => {
     const start = process.hrtime();
+
+    ctx.span = tracer.startSpan('http_request');
+    ctx.id = uuidv4();
+    ctx.log = log.child({
+      component: 'koa',
+      req_id: ctx.id,
+    });
+
     await next();
+
     const end = process.hrtime(start);
-    ctx.log.trace({
+    const reqData = {
       method: ctx.method,
       url: ctx.url,
       status: ctx.status,
       responseTime: ((end[0] * 1e3) + (end[1] / 1000000)).toPrecision(3),
-    });
+    };
+
+    ctx.log.trace(reqData);
+
+    ctx.span.log({ event: 'request_end', ...reqData });
+    ctx.span.finish();
   });
 
   // error handler

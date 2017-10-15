@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'emotion/react';
+import request from 'axios';
 
 import { Island, Title, Button, Input } from './';
 
@@ -115,7 +116,34 @@ class MobilePaymentContract extends Component {
       return;
     }
 
-    this.props.onPaymentSuccess({ sum, phoneNumber, commission });
+    request.post(`/cards/${this.props.activeCard.id}/pay`, { amount: sum, phoneNumber })
+      .then((res) => {
+        console.log(res);
+        this.props.onPaymentSuccess({ sum, phoneNumber, commission });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+
+    /*
+  const data = new FormData();
+  data.append('json', JSON.stringify({ amount: sum, phoneNumber }));
+
+  fetch(`/cards/${this.props.activeCard.id}/pay`, {
+    method: 'post',
+    body: data,
+  })
+    .then((res) => {
+      if (res.status !== 201) {
+        throw new Error(`${res.status} (${res.statusText})`);
+      }
+
+      this.props.onPaymentSuccess({ sum, phoneNumber, commission });
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+    */
   }
 
   /**

@@ -49,8 +49,12 @@ class FileModel extends Model {
   }
 
   async get(id) {
+    const span = this.tracer.startSpan('getById');
+    span.log({ event: 'get', id });
     const card = this._dataSource.find((item) => item.id === id);
 
+    span.log({ card });
+    span.finish();
     this.log.trace({
       function: 'get',
       card,
