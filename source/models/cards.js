@@ -46,31 +46,6 @@ class Cards extends FileModel {
     throw err;
   }
 
-  async save(card) {
-    const isDataValid = card
-      && has.call(card, 'cardNumber')
-      && has.call(card, 'balance');
-
-    const isNewCard = card.id;
-
-    if (!isDataValid) {
-      throw new ApplicationError('Card data is invalid', 400);
-    }
-
-    let newCard = Object.assign({}, card);
-
-    if (isNewCard) {
-      newCard = Object.assign(newCard, {
-        id: this._generateId(),
-      });
-
-      this._dataSource.push(newCard);
-    }
-
-    await this._saveUpdates();
-    return newCard;
-  }
-
   /**
    * Удаляет карту
    * @param {Number} id - идентификатор карты

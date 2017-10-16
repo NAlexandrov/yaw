@@ -23,11 +23,17 @@ module.exports = {
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "react/jsx-closing-bracket-location": [1, "after-props"],
     "react/require-default-props": 0,
-    "react/no-array-index-key": 0
+    "react/no-array-index-key": 0,
+
+    "function-paren-newline": 0,
   },
   globals: {
     expect: true,
     test: true,
     it: true,
+    describe: true,
+    beforeAll: true,
+    afterAll: true,
+    jest: true,
   },
 };

@@ -35,7 +35,7 @@ class FileModel extends Model {
           error: err,
         });
 
-        throw new ApplicationError('Read model error', 500);
+        throw new ApplicationError(`Read model error ${err.toString()}`, 500);
       }
     }
 
@@ -49,12 +49,8 @@ class FileModel extends Model {
   }
 
   async get(id) {
-    const span = this.tracer.startSpan('getById');
-    span.log({ event: 'get', id });
     const card = this._dataSource.find((item) => item.id === id);
 
-    span.log({ card });
-    span.finish();
     this.log.trace({
       function: 'get',
       card,

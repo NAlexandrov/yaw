@@ -2,3 +2,4 @@ build
 public
 node_modules
 source/views/index.server.js
+coverage

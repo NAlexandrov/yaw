@@ -41,7 +41,8 @@ class Transactions extends FileModel {
   /**
    * Удаление транзакции
    */
-  static async remove() {
+  // eslint-disable-next-line
+  async remove() {
     throw new ApplicationError('Transaction can\'t be removed', 400);
   }
 }
