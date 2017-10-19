@@ -35,5 +35,8 @@ module.exports = {
     beforeAll: true,
     afterAll: true,
     jest: true,
+    shallow: true,
+    render: true,
+    mount: true,
   },
 };

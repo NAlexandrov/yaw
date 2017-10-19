@@ -1,6 +1,6 @@
 'use strict';
 
-const ApplicationError = require('../libs/application-error.js');
+const ApplicationError = require('../../libs/application-error.js');
 
 describe('ApplicationError', () => {
   test('should return a default status', () => {

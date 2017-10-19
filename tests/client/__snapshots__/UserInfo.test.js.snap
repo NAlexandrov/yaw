@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<UserInfo /> should render a button 1`] = `
+<Button>
+  Войти
+</Button>
+`;
+
+exports[`<UserInfo /> should render an avatar 1`] = `
+<styled(Component)>
+  <styled(Component)
+    src="/assets/avatar.png"
+  />
+  admin
+</styled(Component)>
+`;

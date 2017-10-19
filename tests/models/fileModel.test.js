@@ -3,7 +3,7 @@
 'use strict';
 
 const fs = require('fs');
-const logger = require('./__mocks__/logger.js');
+const logger = require('../__mocks__/logger.js');
 
 const testData = [{
   id: 1,
@@ -24,7 +24,7 @@ describe('FileModel', () => {
       });
 
     // eslint-disable-next-line
-    const FileModel = require('../source/models/common/fileModel.js');
+    const FileModel = require('../../source/models/common/fileModel.js');
 
     testModel = new FileModel({
       sourceFileName: 'test.json',

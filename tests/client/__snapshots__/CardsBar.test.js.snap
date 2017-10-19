@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Title /> should render a cards bar 1`] = `
+<styled(Component)>
+  <styled(Component) />
+  <styled(Component) />
+  <styled(Component)>
+    <Card
+      active={false}
+      data={
+        Object {
+          "balance": "231310",
+          "cardNumber": "546925000000000",
+          "id": 1,
+        }
+      }
+      key="0"
+      onClick={[Function]}
+    />
+    <Card
+      type="new"
+    />
+  </styled(Component)>
+  <styled(Component)>
+    Yamoney Node School
+  </styled(Component)>
+</styled(Component)>
+`;

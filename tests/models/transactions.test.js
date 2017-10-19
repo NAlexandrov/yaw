@@ -1,7 +1,7 @@
 'use strict';
 
 const fs = require('fs');
-const logger = require('./__mocks__/logger.js');
+const logger = require('../__mocks__/logger.js');
 
 const testData = [{
   id: 1,
@@ -28,7 +28,7 @@ describe('CardsModel', () => {
     fs.writeFile = jest.fn((fileName, data, cb) => cb());
 
     // eslint-disable-next-line
-    const Transaction = require('../source/models/transactions.js');
+    const Transaction = require('../../source/models/transactions.js');
 
     transactionModel = new Transaction({
       sourceFileName: 'transactions.json',
