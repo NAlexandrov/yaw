@@ -4,6 +4,7 @@ module.exports = {
   collectCoverageFrom: [
     'libs/**/*.{js,jsx}',
     'source/**/*.{js,jsx}',
+    '!source/views/index.server.js',
   ],
   roots: [
     '<rootDir>/tests/',
