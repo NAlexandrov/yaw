@@ -14,3 +14,4 @@ Thumbs.db
 *.log
 npm-debug.log*
 package-lock.json
+.coveralls.yml

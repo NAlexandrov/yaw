@@ -8,9 +8,10 @@ notifications:
 
 install:
   - npm install -g codecov
+  - npm install -g coveralls
 
 before_script:
   - npm run build
 
 script:
-  - npm test && codecov
+  - npm test && codecov && cat ./coverage/lcov.info | coveralls
