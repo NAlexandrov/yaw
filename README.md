@@ -5,3 +5,4 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/af9bb8a3588c8f708bc9/maintainability)](https://codeclimate.com/github/NAlexandrov/yaw/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/af9bb8a3588c8f708bc9/test_coverage)](https://codeclimate.com/github/NAlexandrov/yaw/test_coverage)
 [![Known Vulnerabilities](https://snyk.io/test/github/nalexandrov/yaw/badge.svg)](https://snyk.io/test/github/nalexandrov/yaw)
+[![dependencies Status](https://david-dm.org/NAlexandrov/yaw/status.svg)](https://david-dm.org/NAlexandrov/yaw)
