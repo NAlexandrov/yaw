@@ -32,4 +32,27 @@ describe('cardsController', () => {
     expect(ctx.status).toEqual(201);
     expect(ctx.body).toMatchObject(testPay);
   });
+
+  test('should throw a error', async () => {
+    ctx.cardsModel.get.mockReturnValueOnce(null);
+    await expect(createController(ctx)).rejects.toBeInstanceOf(Error);
+  });
+
+  test('should throw a error if amount not a number', async () => {
+    const ctxWithOutAmount = Object.assign({}, ctx, {
+      request: {
+        body: { ...testPay, amount: null },
+      },
+    });
+    await expect(createController(ctxWithOutAmount)).rejects.toBeInstanceOf(Error);
+  });
+
+  test('should throw a error if phoneNumber is empty', async () => {
+    const ctxWithOutPhone = Object.assign({}, ctx, {
+      request: {
+        body: { ...testPay, phoneNumber: null },
+      },
+    });
+    await expect(createController(ctxWithOutPhone)).rejects.toBeInstanceOf(Error);
+  });
 });
