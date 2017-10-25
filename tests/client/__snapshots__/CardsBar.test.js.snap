@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<Title /> should render a cards bar 1`] = `
-<styled(Component)>
-  <styled(Component) />
-  <styled(Component) />
-  <styled(Component)>
+<Styled(div)>
+  <Styled(div) />
+  <Styled(div) />
+  <Styled(div)>
     <Card
       active={false}
       data={
@@ -20,9 +20,9 @@ exports[`<Title /> should render a cards bar 1`] = `
     <Card
       type="new"
     />
-  </styled(Component)>
-  <styled(Component)>
+  </Styled(div)>
+  <Styled(footer)>
     Yamoney Node School
-  </styled(Component)>
-</styled(Component)>
+  </Styled(footer)>
+</Styled(div)>
 `;
