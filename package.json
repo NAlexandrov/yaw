@@ -9,7 +9,9 @@
     "precommit": "npm run lint",
     "start": "node index.js",
     "watch": "nodemon --watch source index.js | npx bunyan",
-    "test": "npx jest"
+    "test": "npx jest",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -39,7 +41,8 @@
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "serialize-javascript": "^1.4.0",
-    "uuid": "^3.1.0"
+    "uuid": "^3.1.0",
+    "snyk": "^1.46.0"
   },
   "devDependencies": {
     "antd": "^2.13.7",
@@ -75,5 +78,6 @@
     "supertest": "^3.0.0",
     "url-loader": "^0.6.2",
     "webpack": "^3.8.1"
-  }
+  },
+  "snyk": true
 }
