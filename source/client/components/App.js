@@ -103,6 +103,7 @@ class App extends Component {
       removeCardId: 0,
       isCardRemoving: false,
       isCardsEditable: false,
+      user: data.user,
     };
   }
 
@@ -178,7 +179,7 @@ class App extends Component {
 	 */
   render() {
     const {
-      cardsList, activeCardIndex, cardHistory, isCardsEditable, isCardRemoving, removeCardId,
+      cardsList, activeCardIndex, cardHistory, isCardsEditable, isCardRemoving, removeCardId, user,
     } = this.state;
     const activeCard = cardsList[activeCardIndex];
 
@@ -197,7 +198,7 @@ class App extends Component {
           deleteCard={(index) => this.deleteCard(index)}
           onChangeBarMode={(event, index) => this.onChangeBarMode(event, index)} />
         <CardPane>
-          <Header activeCard={activeCard} />
+          <Header activeCard={activeCard} user={user} />
           <Workspace>
             <History cardHistory={filteredHistory} />
             <Prepaid

@@ -1,6 +1,6 @@
 'use strict';
 
-const router = require('koa-router')();
+const router = require('koa-joi-router');
 const { renderToStaticNodeStream } = require('react-dom/server');
 
 const getCardsController = require('./controllers/cards/get-cards.js');
@@ -12,8 +12,11 @@ const createTransactionsController = require('./controllers/transactions/create.
 
 const createPayController = require('./controllers/pay/create.js');
 
-const errorController = require('./controllers/error.js');
+// const errorController = require('./controllers/error.js');
 const indexView = require('./views/index.server.js');
+
+const { Joi } = router;
+const route = router();
 
 async function getData(ctx) {
   const user = {
@@ -31,21 +34,32 @@ async function getData(ctx) {
   };
 }
 
-router.get('/', async (ctx) => {
+route.get('/', async (ctx) => {
   const data = await getData(ctx);
   ctx.type = 'html';
   ctx.body = renderToStaticNodeStream(indexView(data));
 });
 
-router.get('/cards/', getCardsController);
-router.post('/cards/', createCardController);
-router.delete('/cards/:id', deleteCardController);
+route.get('/cards/', getCardsController);
+route.post('/cards/', createCardController);
+route.delete('/cards/:id', deleteCardController);
 
-router.get('/cards/:id/transactions/', getTransactionsController);
-router.post('/cards/:id/transactions/', createTransactionsController);
+route.get('/cards/:id/transactions/', getTransactionsController);
+route.post('/cards/:id/transactions/', createTransactionsController);
 
-router.post('/cards/:id/pay', createPayController);
+route.route({
+  method: 'post',
+  path: '/cards/:id/pay',
+  validate: {
+    type: 'json',
+    body: {
+      phoneNumber: Joi.string().required(),
+      sum: Joi.number().required(),
+    },
+  },
+  handler: createPayController,
+});
 
-router.all('/error', errorController);
+// router.all('/error', errorController);
 
-module.exports = router;
+module.exports = route;

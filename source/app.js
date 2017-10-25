@@ -2,7 +2,6 @@
 
 const path = require('path');
 const Koa = require('koa');
-const bodyParser = require('koa-bodyparser')();
 const serve = require('koa-static');
 
 const router = require('./routes.js');
@@ -16,8 +15,7 @@ module.exports = (appCfg, log, tracer) => {
   app.use(logger(log, tracer));
   app.use(errorHandler);
   app.use(models);
-  app.use(bodyParser);
-  app.use(router.routes());
+  app.use(router.middleware());
   app.use(serve(path.join(__dirname, '..', 'public')));
 
   return app;
