@@ -1,7 +1,7 @@
 'use strict';
 
 const router = require('koa-router')();
-const { renderToStaticMarkup } = require('react-dom/server');
+const { renderToStaticNodeStream } = require('react-dom/server');
 
 const getCardsController = require('./controllers/cards/get-cards.js');
 const createCardController = require('./controllers/cards/create.js');
@@ -23,9 +23,8 @@ const DATA = {
 };
 
 router.get('/', (ctx) => {
-  const indexViewHtml = renderToStaticMarkup(indexView(DATA));
-
-  ctx.body = indexViewHtml;
+  ctx.type = 'html';
+  ctx.body = renderToStaticNodeStream(indexView(DATA));
 });
 
 router.get('/cards/', getCardsController);
