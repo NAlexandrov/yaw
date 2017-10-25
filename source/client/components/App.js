@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'emotion/react';
+import styled from 'react-emotion';
 import { injectGlobal } from 'emotion';
 import CardInfo from 'card-info';
 import {
