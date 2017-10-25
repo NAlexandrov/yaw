@@ -1,8 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Title /> should render a cards bar 1`] = `
+exports[`<CardsBar /> should render a cards bar 1`] = `
 <Styled(div)>
-  <Styled(div) />
   <Styled(div) />
   <Styled(div)>
     <Card
@@ -14,7 +13,9 @@ exports[`<Title /> should render a cards bar 1`] = `
           "id": 1,
         }
       }
+      isCardsEditable={false}
       key="0"
+      onChangeBarMode={[Function]}
       onClick={[Function]}
     />
     <Card

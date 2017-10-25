@@ -11,13 +11,17 @@ const activeCardIndex = 1;
 
 const onCardChange = jest.fn();
 
-describe('<Title />', () => {
+describe('<CardsBar />', () => {
   test('should render a cards bar', () => {
     const wrapper = shallow(
       <CardsBar
         cardsList={cardsList}
         activeCardIndex={activeCardIndex}
-        onCardChange={onCardChange} />);
+        onCardChange={onCardChange}
+        isCardsEditable={false}
+        isCardRemoving={false}
+        deleteCard={() => ({})}
+        onChangeBarMode={() => ({})} />);
 
     expect(wrapper).toMatchSnapshot();
   });

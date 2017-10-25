@@ -1,7 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<UserInfo /> should render a button 1`] = `
-<Button>
+<Button
+  bgColor="rgba(0, 0, 0, 0.05)"
+  textColor="rgba(0, 0, 0, 0.65)"
+>
   Войти
 </Button>
 `;
