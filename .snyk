@@ -1,0 +1,11 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.7.1
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:debug:20170905':
+    - koa-joi-router > debug:
+        patched: '2017-10-25T17:35:45.407Z'
+  'npm:ms:20170412':
+    - koa-joi-router > debug > ms:
+        patched: '2017-10-25T17:35:45.407Z'
