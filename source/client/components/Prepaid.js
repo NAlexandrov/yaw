@@ -9,9 +9,9 @@ import PrepaidSuccess from './PrepaidSuccess';
  */
 class Prepaid extends Component {
   /**
-   * Конструктор
-   * @param {Object} props свойства компонента Prepaid
-   */
+	 * Конструктор
+	 * @param {Object} props свойства компонента Prepaid
+	 */
   constructor(props) {
     super(props);
 
@@ -19,10 +19,11 @@ class Prepaid extends Component {
   }
 
   /**
-   * Обработка успешного платежа
-   * @param {Object} transaction данные о транзакции
-   */
+	 * Обработка успешного платежа
+	 * @param {Object} transaction данные о транзакции
+	 */
   onPaymentSuccess(transaction) {
+    this.props.onTransaction();
     this.setState({
       stage: 'success',
       transaction,
@@ -30,16 +31,16 @@ class Prepaid extends Component {
   }
 
   /**
-   * Повторить платеж
-   */
+	 * Повторить платеж
+	 */
   repeatPayment() {
     this.setState({ stage: 'contract' });
   }
 
   /**
-   * Функция отрисовки компонента
-   * @returns {JSX}
-   */
+	 * Функция отрисовки компонента
+	 * @returns {JSX}
+	 */
   render() {
     const { transaction } = this.state;
     const { activeCard, inactiveCardsList } = this.props;
@@ -54,7 +55,7 @@ class Prepaid extends Component {
       <PrepaidContract
         activeCard={activeCard}
         inactiveCardsList={inactiveCardsList}
-        onPaymentSuccess={(t) => this.onPaymentSuccess(t)} />
+        onPaymentSuccess={(data) => this.onPaymentSuccess(data)} />
     );
   }
 }
@@ -64,6 +65,7 @@ Prepaid.propTypes = {
     id: PropTypes.number,
   }).isRequired,
   inactiveCardsList: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onTransaction: PropTypes.func.isRequired,
 };
 
 export default Prepaid;

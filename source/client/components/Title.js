@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 
 const StyledTitle = styled.h2`
-    margin: 0 0 20px;
-    font-size: 24px;
-    font-weight: bold;
-    color: #000;
+	margin: 0 0 20px;
+	font-size: 24px;
+	font-weight: 600;
+	color: #000;
 `;
 
 const Title = ({ children, className }) => (

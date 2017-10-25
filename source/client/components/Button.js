@@ -3,21 +3,21 @@ import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 
 const StyledButton = styled.button`
-  height: 36px;
-  width: 120px;
-  font-size: 13px;
-  font-weight: 600;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  background-color: ${({ bgColor }) => bgColor || 'rgba(0, 0, 0, 0.05)'};
-  color: ${({ textColor }) => textColor || 'rgba(0, 0, 0, 0.65)'};
+	height: 36px;
+	width: 120px;
+	font-size: 13px;
+	font-weight: 600;
+	border: none;
+	border-radius: 3px;
+	cursor: pointer;
+	background-color: ${({ bgColor }) => bgColor};
+	color: ${({ textColor }) => textColor};
 
-  &:focus,
-  &:hover {
-    color: ${({ textColor }) => textColor || 'rgba(0, 0, 0, 0.65)'};
-    background-color: ${({ bgColor }) => bgColor || 'rgba(0, 0, 0, 0.05)'};
-  }
+	&:focus,
+	&:hover {
+		background-color: ${({ bgColor }) => bgColor};
+		color: ${({ textColor }) => textColor};
+	}
 `;
 
 const Button = ({
@@ -31,6 +31,11 @@ Button.propTypes = {
   textColor: PropTypes.string,
   children: PropTypes.node,
   className: PropTypes.string,
+};
+
+Button.defaultProps = {
+  bgColor: 'rgba(0, 0, 0, 0.05)',
+  textColor: 'rgba(0, 0, 0, 0.65)',
 };
 
 export default Button;

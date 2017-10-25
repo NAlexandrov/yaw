@@ -9,9 +9,9 @@ import MobilePaymentSuccess from './MobilePaymentSuccess';
  */
 class MobilePayment extends Component {
   /**
-   * Конструктор
-   * @param {Object} props свойства компонента MobilePayment
-   */
+	 * Конструктор
+	 * @param {Object} props свойства компонента MobilePayment
+	 */
   constructor(props) {
     super(props);
 
@@ -19,10 +19,11 @@ class MobilePayment extends Component {
   }
 
   /**
-   * Обработка успешного платежа
-   * @param {Object} transaction данные о транзакции
-   */
+	 * Обработка успешного платежа
+	 * @param {Object} transaction данные о транзакции
+	 */
   onPaymentSuccess(transaction) {
+    this.props.onTransaction();
     this.setState({
       stage: 'success',
       transaction,
@@ -30,18 +31,18 @@ class MobilePayment extends Component {
   }
 
   /**
-   * Повторить платеж
-   */
+	 * Повторить платеж
+	 */
   repeatPayment() {
     this.setState({ stage: 'contract' });
   }
 
   /**
-   * Рендер компонента
-   *
-   * @override
-   * @returns {JSX}
-   */
+	 * Рендер компонента
+	 *
+	 * @override
+	 * @returns {JSX}
+	 */
   render() {
     const { activeCard } = this.props;
 
@@ -67,6 +68,7 @@ MobilePayment.propTypes = {
     id: PropTypes.number,
     theme: PropTypes.object,
   }).isRequired,
+  onTransaction: PropTypes.func.isRequired,
 };
 
 export default MobilePayment;

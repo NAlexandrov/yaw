@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 import { injectGlobal } from 'emotion';
 import CardInfo from 'card-info';
+import axios from 'axios';
+
 import {
   CardsBar,
   Header,
@@ -14,38 +16,34 @@ import {
 
 import './fonts.css';
 
-import cardsData from '../../data/cards.json';
-import transactionsData from '../../data/transactions.json';
+injectGlobal([`
+	html,
+	body {
+		margin: 0
+	}
 
-// eslint-disable-next-line
-injectGlobal`
-  html,
-  body {
-    margin: 0;
-  }
-
-  #root {
-    height: 100%;
-    font-family: 'Open Sans';
-    color: #000;
-  }
-`;
+	#root {
+		height: 100%
+		font-family: 'Open Sans'
+		color: #000
+	}
+`]);
 
 const Wallet = styled.div`
-  display: flex;
-  min-height: 100%;
-  background-color: #fcfcfc;
+	display: flex;
+	min-height: 100%;
+	background-color: #fcfcfc;
 `;
 
 const CardPane = styled.div`
-  flex-grow: 1;
+	flex-grow: 1;
 `;
 
 const Workspace = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  max-width: 970px;
-  padding: 15px;
+	display: flex;
+	flex-wrap: wrap;
+	max-width: 970px;
+	padding: 15px;
 `;
 
 /**
@@ -53,42 +51,13 @@ const Workspace = styled.div`
  */
 class App extends Component {
   /**
-   * Конструктор
-   */
-  constructor() {
-    super();
-
-    const cardsList = this.prepareCardsData(cardsData);
-    const cardHistory = transactionsData.map((data) => {
-      const card = cardsList.find((c) => c.id === data.cardId);
-      return card ? Object.assign({}, data, { card }) : data;
-    });
-
-    this.state = {
-      cardsList,
-      cardHistory,
-      activeCardIndex: 0,
-    };
-  }
-
-  /**
-   * Обработчик переключения карты
-   *
-   * @param {Number} activeCardIndex индекс выбранной карты
-   */
-  onCardChange(activeCardIndex) {
-    this.setState({ activeCardIndex });
-  }
-
-  /**
-   * Подготавливает данные карт
-   *
-   * @param {Object} cardsData данные карт
-   * @returns {Object[]}
-   */
-  // eslint-disable-next-line
-  prepareCardsData(data) {
-    return data.map((card) => {
+	 * Подготавливает данные карт
+	 *
+	 * @param {Object} cards данные карт
+	 * @returns {Object[]}
+	 */
+  static prepareCardsData(cards) {
+    return cards.map((card) => {
       const cardInfo = new CardInfo(card.cardNumber, {
         banksLogosPath: '/assets/',
         brandsLogosPath: '/assets/',
@@ -110,38 +79,137 @@ class App extends Component {
     });
   }
 
+  static prepareHistory(cardsList, transactionsData) {
+    return transactionsData.map((data) => {
+      const card = cardsList.find((item) => item.id === Number(data.cardId));
+      return card ? Object.assign({}, data, { card }) : data;
+    });
+  }
+
   /**
-   * Рендер компонента
-   *
-   * @override
-   * @returns {JSX}
-   */
+	 * Конструктор
+	 */
+  constructor(props) {
+    super();
+
+    const { data } = props;
+    const cardsList = App.prepareCardsData(data.cards);
+    const cardHistory = App.prepareHistory(cardsList, data.transactions);
+
+    this.state = {
+      cardsList,
+      cardHistory,
+      activeCardIndex: 0,
+      removeCardId: 0,
+      isCardRemoving: false,
+      isCardsEditable: false,
+    };
+  }
+
+  /**
+	 * Обработчик переключения карты
+	 *
+	 * @param {Number} activeCardIndex индекс выбранной карты
+	 */
+  onCardChange(activeCardIndex) {
+    this.setState({ activeCardIndex });
+  }
+
+  /**
+	* Обработчик события редактирования карт
+	* @param {Boolean} isEditable Признак редактируемости
+	*/
+  onEditChange(isEditable) {
+    const isCardsEditable = !isEditable;
+    this.setState({
+      isCardsEditable,
+      isCardRemoving: false,
+    });
+  }
+
+  /**
+	* Функция вызывает при успешной транзакции
+	*/
+  onTransaction() {
+    axios.get('/cards').then(({ cards }) => {
+      const cardsList = App.prepareCardsData(cards);
+      this.setState({ cardsList });
+
+      axios.get('/transactions').then(({ transactions }) => {
+        const cardHistory = App.prepareHistory(cardsList, transactions);
+        this.setState({ cardHistory });
+      });
+    });
+  }
+
+  /**
+	 * Обработчик события переключения режима сайдбара
+	 * @param {String} mode Режим сайдбара
+	 * @param {String} index Индекс выбранной карты
+	 */
+  onChangeBarMode(event, removeCardId) {
+    event.stopPropagation();
+    this.setState({
+      isCardRemoving: true,
+      removeCardId,
+    });
+  }
+
+  /**
+	 * Удаление карты
+	 * @param {Number} index Индекс карты
+	 */
+  deleteCard(id) {
+    axios
+      .delete(`/cards/${id}`)
+      .then(() => {
+        axios.get('/cards').then(({ data }) => {
+          const cardsList = App.prepareCardsData(data);
+          this.setState({ cardsList });
+        });
+      });
+  }
+
+  /**
+	 * Рендер компонента
+	 *
+	 * @override
+	 * @returns {JSX}
+	 */
   render() {
-    const { data } = this.props;
-    const { cardsList, activeCardIndex, cardHistory } = this.state;
+    const {
+      cardsList, activeCardIndex, cardHistory, isCardsEditable, isCardRemoving, removeCardId,
+    } = this.state;
     const activeCard = cardsList[activeCardIndex];
 
     const inactiveCardsList = cardsList.filter((card, index) => (index === activeCardIndex ? false : card));
-    const filteredHistory = cardHistory.filter((d) => d.cardId === activeCard.id);
+    const filteredHistory = cardHistory.filter((data) => Number(data.cardId) === activeCard.id);
 
     return (
       <Wallet>
         <CardsBar
           activeCardIndex={activeCardIndex}
+          removeCardId={removeCardId}
           cardsList={cardsList}
-          onCardChange={(cardIndex) => this.onCardChange(cardIndex)} />
+          onCardChange={(index) => this.onCardChange(index)}
+          isCardsEditable={isCardsEditable}
+          isCardRemoving={isCardRemoving}
+          deleteCard={(index) => this.deleteCard(index)}
+          onChangeBarMode={(event, index) => this.onChangeBarMode(event, index)} />
         <CardPane>
-          <Header activeCard={activeCard} user={data.user} />
+          <Header activeCard={activeCard} />
           <Workspace>
             <History cardHistory={filteredHistory} />
             <Prepaid
               activeCard={activeCard}
               inactiveCardsList={inactiveCardsList}
-              onCardChange={(newActiveCardIndex) => this.onCardChange(newActiveCardIndex)} />
-            <MobilePayment activeCard={activeCard} />
+              onCardChange={(newActiveCardIndex) => this.onCardChange(newActiveCardIndex)}
+              onTransaction={() => this.onTransaction()} />
+            <MobilePayment activeCard={activeCard} onTransaction={() => this.onTransaction()} />
             <Withdraw
               activeCard={activeCard}
-              inactiveCardsList={inactiveCardsList} />
+              inactiveCardsList={inactiveCardsList}
+              onTransaction={() => this.onTransaction()} />
           </Workspace>
         </CardPane>
       </Wallet>

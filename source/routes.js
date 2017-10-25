@@ -15,16 +15,26 @@ const createPayController = require('./controllers/pay/create.js');
 const errorController = require('./controllers/error.js');
 const indexView = require('./views/index.server.js');
 
-const DATA = {
-  user: {
+async function getData(ctx) {
+  const user = {
     login: 'samuel_johnson',
     name: 'Samuel Johnson',
-  },
-};
+  };
 
-router.get('/', (ctx) => {
+  const cards = await ctx.cardsModel.getAll();
+  const transactions = await ctx.transactionsModel.getAll();
+
+  return {
+    user,
+    cards,
+    transactions,
+  };
+}
+
+router.get('/', async (ctx) => {
+  const data = await getData(ctx);
   ctx.type = 'html';
-  ctx.body = renderToStaticNodeStream(indexView(DATA));
+  ctx.body = renderToStaticNodeStream(indexView(data));
 });
 
 router.get('/cards/', getCardsController);

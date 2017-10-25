@@ -1,73 +1,74 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
+import axios from 'axios';
 
 import { Island, Title, Button, Input } from './';
 
 const PrepaidLayout = styled(Island)`
-    width: 350px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #353536;
+	width: 350px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background-color: #353536;
 `;
 
 const PrepaidTitle = styled(Title)`
-    color: #fff;
+	color: #fff;
 `;
 
 const PrepaidItems = styled.div`
-    width: 285px;
-    margin-bottom: 40px;
+	width: 285px;
+	margin-bottom: 40px;
 `;
 
 const PrepaidItem = styled.div`
-    height: 65px;
-    display: flex;
-    align-items: center;
-    border-radius: 3px;
-    cursor: pointer;
-    background-color: ${({ selected, bgColor }) => (selected ? bgColor : 'rgba(0, 0, 0, 0.05)')};
+	height: 65px;
+	display: flex;
+	align-items: center;
+	border-radius: 3px;
+	cursor: pointer;
+	background-color: ${({ selected, bgColor }) => (selected ? bgColor : 'rgba(0, 0, 0, 0.05)')};
 `;
 
 const PrepaidItemIcon = styled.div`
-    width: 42px;
-    height: 42px;
-    margin: 18px;
-    border-radius: 21px;
-    background-image: url(${({ bankSmLogoUrl }) => bankSmLogoUrl});
-    background-size: contain;
-    background-repeat: no-repeat;
-    filter: ${({ selected }) => (selected ? 'none' : 'grayscale(100%)')};
+	width: 42px;
+	height: 42px;
+	margin: 18px;
+	border-radius: 21px;
+	background-image: url(${({ bankSmLogoUrl }) => bankSmLogoUrl});
+	background-size: contain;
+	background-repeat: no-repeat;
+	filter: ${({ selected }) => (selected ? 'none' : 'grayscale(100%)')};
 `;
 
 const PrepaidItemTitle = styled.div`
-    font-size: 13px;
-    color: ${({ selected, textColor }) => (selected ? textColor : 'rgba(255, 255, 255, 0.6)')};
+	font-size: 13px;
+	color: ${({ selected, textColor }) => (selected ? textColor : 'rgba(255, 255, 255, 0.6)')};
 `;
 
 const PrepaidItemDescription = styled.div`
-    color: ${({ selected, textColor }) => (selected ? textColor : 'rgba(255, 255, 255, 0.4)')};
+	color: ${({ selected, textColor }) => (selected ? textColor : 'rgba(255, 255, 255, 0.4)')};
 `;
 
 const InputField = styled.div`
-    margin: 20px 0;
-    position: relative;
+	margin: 20px 0;
+	position: relative;
 `;
 
 const SumInput = styled(Input)`
-    max-width: 200px;
-    padding-right: 20px;
-    background-color: rgba(0, 0, 0, 0.08);
-    color: #fff;
+	max-width: 200px;
+	padding-right: 20px;
+	background-color: rgba(0, 0, 0, 0.08);
+	color: #fff;
 `;
 
 const Currency = styled.span`
-    font-size: 12px;
-    position: absolute;
-    right: 10;
-    top: 8px;
-    color: #fff;
+	font-size: 12px;
+	position: absolute;
+	right: 10;
+	top: 8px;
+	color: #fff;
 `;
 
 /**
@@ -75,9 +76,9 @@ const Currency = styled.span`
  */
 class PrepaidContract extends Component {
   /**
-   * Конструктор
-   * @param {Object} props свойства компонента PrepaidContract
-   */
+	 * Конструктор
+	 * @param {Object} props свойства компонента PrepaidContract
+	 */
   constructor(props) {
     super(props);
 
@@ -88,17 +89,17 @@ class PrepaidContract extends Component {
   }
 
   /**
-   * Изменения активной карты
-   * @param {Number} activeCardIndex индекс активной карты
-   */
+	 * Изменения активной карты
+	 * @param {Number} activeCardIndex индекс активной карты
+	 */
   onCardChange(activeCardIndex) {
     this.setState({ activeCardIndex });
   }
 
   /**
-   * Обработка изменения значения в input
-   * @param {Event} event событие изменения значения input
-   */
+	 * Обработка изменения значения в input
+	 * @param {Event} event событие изменения значения input
+	 */
   onChangeInputValue(event) {
     if (!event) {
       return;
@@ -112,32 +113,42 @@ class PrepaidContract extends Component {
   }
 
   /**
-   * Отправка формы
-   * @param {Event} event событие отправки формы
-   */
+	 * Отправка формы
+	 * @param {Event} event событие отправки формы
+	 */
   onSubmitForm(event) {
     if (event) {
       event.preventDefault();
     }
 
-    const { sum } = this.state;
-    const { activeCard } = this.props;
+    const { activeCardIndex, sum } = this.state;
+    const { activeCard, inactiveCardsList } = this.props;
+    const selectedCard = inactiveCardsList[activeCardIndex];
 
     const isNumber = !isNaN(parseFloat(sum)) && isFinite(sum);
     if (!isNumber || sum <= 0) {
       return;
     }
 
-    this.props.onPaymentSuccess({
+    const options = {
+      method: 'post',
+      url: `/cards/${activeCard.id}/transfer`,
+      data: {
+        target: selectedCard.id,
+        sum,
+      },
+    };
+
+    axios(options).then(() => this.props.onPaymentSuccess({
       sum,
       number: activeCard.number,
-    });
+    }));
   }
 
   /**
-   *
-   * @returns {XML}
-   */
+	 *
+	 * @returns {XML}
+	 */
   render() {
     const { inactiveCardsList } = this.props;
 
@@ -151,27 +162,29 @@ class PrepaidContract extends Component {
 
           <PrepaidItems>
             {
-              inactiveCardsList.map((card, index) => (
-                <PrepaidItem
-                  bgColor={card.theme.bgColor}
-                  key={card.id}
-                  onClick={() => this.onCardChange(index)}
-                  selected={activeCardIndex === index}>
-                  <PrepaidItemIcon
-                    bankSmLogoUrl={card.theme.bankSmLogoUrl}
-                    selected={activeCardIndex === index} />
-                  <PrepaidItemTitle
-                    textColor={card.theme.textColor}
+              inactiveCardsList
+                .filter((item) => !item.hidden)
+                .map((card, index) => (
+                  <PrepaidItem
+                    bgColor={card.theme.bgColor}
+                    key={card.id}
+                    onClick={() => this.onCardChange(index)}
                     selected={activeCardIndex === index}>
-                    C банковской карты
-                                        <PrepaidItemDescription
-                                          textColor={card.theme.textColor}
-                                          selected={activeCardIndex === index}>
-                                          {card.number}
-                                        </PrepaidItemDescription>
-                  </PrepaidItemTitle>
-                </PrepaidItem>
-              ))
+                    <PrepaidItemIcon
+                      bankSmLogoUrl={card.theme.bankSmLogoUrl}
+                      selected={activeCardIndex === index} />
+                    <PrepaidItemTitle
+                      textColor={card.theme.textColor}
+                      selected={activeCardIndex === index}>
+                      C банковской карты
+                    <PrepaidItemDescription
+                      textColor={card.theme.textColor}
+                      selected={activeCardIndex === index}>
+                      {card.number}
+                    </PrepaidItemDescription>
+                    </PrepaidItemTitle>
+                  </PrepaidItem>
+                ))
             }
           </PrepaidItems>
 
@@ -197,7 +210,6 @@ class PrepaidContract extends Component {
 PrepaidContract.propTypes = {
   activeCard: PropTypes.shape({
     id: PropTypes.number,
-    theme: PropTypes.object,
   }).isRequired,
   inactiveCardsList: PropTypes.arrayOf(PropTypes.object).isRequired,
   onPaymentSuccess: PropTypes.func.isRequired,
