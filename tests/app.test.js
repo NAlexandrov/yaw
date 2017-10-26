@@ -10,7 +10,7 @@ describe('REST', () => {
   let server;
 
   beforeAll(() => {
-    server = app.listen(appCfg.port);
+    server = app.listen(appCfg.listen.port);
   });
 
   test('GET /cards', () =>

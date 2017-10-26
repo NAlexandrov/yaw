@@ -60,6 +60,4 @@ route.route({
   handler: createPayController,
 });
 
-// router.all('/error', errorController);
-
 module.exports = route;

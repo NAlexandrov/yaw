@@ -1,7 +1,11 @@
 'use strict';
 
 const defaultConfig = {
-  port: 3000,
+  name: 'Yet Another Wallet',
+  listen: {
+    address: 'localhost',
+    port: 3000,
+  },
   logger: {
     level: 'info',
   },
