@@ -33,7 +33,6 @@
     "bunyan": "^1.8.12",
     "dotenv": "^4.0.0",
     "emotion-server": "^8.0.9",
-    "jaeger-client": "^3.5.3",
     "joi": "^13.0.1",
     "koa": "^2.3.0",
     "koa-joi-router": "^5.0.0",
