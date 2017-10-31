@@ -14,6 +14,7 @@ module.exports = {
     "max-len": [2, 120, 4, { "ignoreUrls": true }],
     "no-confusing-arrow": [2, { "allowParens": true }],
     "no-restricted-globals": 0,
+    "no-plusplus": 0,
 
     "import/no-extraneous-dependencies": 0,
     "import/no-unresolved": 0,

@@ -10,7 +10,7 @@
     "precommit": "npm run lint",
     "start": "node index.js",
     "start:https": "HTTPS=1 node index.js",
-    "watch": "nodemon --watch source index.js | npx bunyan",
+    "watch": "WATCH=1 pm2 start ecosystem.config.js --env development --no-daemon",
     "test": "npx jest",
     "snyk-protect": "snyk protect",
     "prepublish": "npm run snyk-protect"
@@ -31,8 +31,10 @@
   "dependencies": {
     "axios": "^0.17.0",
     "bunyan": "^1.8.12",
+    "dotenv": "^4.0.0",
     "emotion-server": "^8.0.9",
     "jaeger-client": "^3.5.3",
+    "joi": "^13.0.1",
     "koa": "^2.3.0",
     "koa-joi-router": "^5.0.0",
     "koa-static": "^4.0.1",

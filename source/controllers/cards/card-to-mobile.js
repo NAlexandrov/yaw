@@ -1,6 +1,9 @@
+
 'use strict';
 
 const { Joi } = require('koa-joi-router');
+
+const commission = 3;
 
 module.exports = {
   /**
@@ -17,16 +20,34 @@ module.exports = {
    */
   validate: {
     type: 'json',
+    params: {
+      id: Joi.number().required(),
+    },
     body: {
-      cardNumber: Joi.string().creditCard().required(),
-      balance: Joi.number().required(),
+      phoneNumber: Joi.string().required(),
+      sum: Joi.number().required(),
     },
   },
 
   handler: async (ctx) => {
-    const card = ctx.request.body;
-    const newCard = await ctx.cardsModel.create(card);
-    ctx.status = 201;
-    ctx.body = newCard;
+    ctx.log.debug(ctx.request);
+
+    const cardId = ctx.params.id;
+
+    const operation = ctx.request.body;
+    const { sum, phoneNumber } = operation;
+
+    await ctx.cardsModel.withdraw(cardId, parseInt(sum, 10) + commission);
+
+    const transaction = await ctx.transactionsModel.create({
+      cardId,
+      type: 'withdrawCard',
+      data: { phoneNumber },
+      time: new Date().toISOString(),
+      sum,
+    });
+
+    ctx.status = 200;
+    ctx.body = transaction;
   },
 };

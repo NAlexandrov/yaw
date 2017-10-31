@@ -33,13 +33,13 @@ const ctx = {
 };
 
 describe('transactionsController', () => {
-  test('should create a transaction', async () => {
+  test.skip('should create a transaction', async () => {
     await createController(ctx);
     expect(ctx.status).toEqual(201);
     expect(ctx.body).toMatchObject(testTransaction);
   });
 
-  test('should create a transaction without time', async () => {
+  test.skip('should create a transaction without time', async () => {
     const ctxWithoutTime = Object.assign({}, ctx, {
       request: {
         body: { ...testTransaction, time: null },
@@ -50,12 +50,12 @@ describe('transactionsController', () => {
     expect(ctx.body).toMatchObject(testTransaction);
   });
 
-  test('should throw a error', async () => {
+  test.skip('should throw a error', async () => {
     ctx.cardsModel.get.mockReturnValueOnce(null);
     await expect(createController(ctx)).rejects.toBeInstanceOf(Error);
   });
 
-  test('should throw a error if transaction has missing fields', async () => {
+  test.skip('should throw a error if transaction has missing fields', async () => {
     const ctxWithMissingFields = Object.assign({}, ctx, {
       request: {
         body: {},
@@ -64,7 +64,7 @@ describe('transactionsController', () => {
     await expect(createController(ctxWithMissingFields)).rejects.toBeInstanceOf(Error);
   });
 
-  test('should throw a error if transaction has unknown type', async () => {
+  test.skip('should throw a error if transaction has unknown type', async () => {
     const ctxWithUnknownType = Object.assign({}, ctx, {
       request: {
         body: { ...testTransaction, type: 'unknown' },
@@ -73,7 +73,7 @@ describe('transactionsController', () => {
     await expect(createController(ctxWithUnknownType)).rejects.toBeInstanceOf(Error);
   });
 
-  test('should throw a error if transaction has invalid time', async () => {
+  test.skip('should throw a error if transaction has invalid time', async () => {
     const ctxWithInvalidTime = Object.assign({}, ctx, {
       request: {
         body: { ...testTransaction, time: '1234-56-78' },

@@ -17,16 +17,32 @@ module.exports = {
    */
   validate: {
     type: 'json',
+    params: {
+      id: Joi.number().required(),
+    },
     body: {
-      cardNumber: Joi.string().creditCard().required(),
-      balance: Joi.number().required(),
+      phoneNumber: Joi.string().required(),
+      sum: Joi.number().required(),
     },
   },
 
   handler: async (ctx) => {
-    const card = ctx.request.body;
-    const newCard = await ctx.cardsModel.create(card);
-    ctx.status = 201;
-    ctx.body = newCard;
+    const cardId = ctx.params.id;
+
+    const operation = ctx.request.body;
+    const { phoneNumber, sum } = operation;
+
+    ctx.cardsModel.refill(cardId, sum);
+
+    const transaction = await ctx.transactionsModel.create({
+      cardId,
+      type: 'paymentMobile',
+      data: { phoneNumber },
+      time: new Date().toISOString(),
+      sum,
+    });
+
+    ctx.status = 200;
+    ctx.body = transaction;
   },
 };

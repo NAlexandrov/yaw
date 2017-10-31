@@ -1,17 +1,13 @@
 'use strict';
 
 const ApplicationError = require('../../libs/application-error');
-const FileModel = require('./common/fileModel');
+const MongoModel = require('./common/mongoModel');
 
-class Transactions extends FileModel {
+class Transactions extends MongoModel {
   constructor(config) {
-    super(Object.assign(config, {
-      sourceFileName: 'transactions.json',
-    }));
-
-    this.log = this.log.child({
-      modelName: 'Transactions',
-    });
+    const modelName = 'Transaction';
+    super(Object.assign(config, { modelName }));
+    this.log = this.log.child({ modelName });
   }
 
   /**
@@ -21,11 +17,12 @@ class Transactions extends FileModel {
    * @returns {Promise.<Object>}
    */
   async create(transaction) {
-    const newTransaction = Object.assign({}, transaction, {
-      id: this._generateId(),
-    });
-    this._dataSource.push(newTransaction);
-    await this._saveUpdates();
+    const id = await this._generateId();
+
+    const newTransaction = Object.assign({}, transaction, { id });
+
+    await this._insert(newTransaction);
+
     return newTransaction;
   }
 
@@ -35,14 +32,14 @@ class Transactions extends FileModel {
    * @return {Promise.<Object[]>}
    */
   async getByCard(cardId) {
-    return this._dataSource.filter((transaction) => transaction.cardId === cardId);
+    const item = await this.getBy({ cardId });
+    return item;
   }
 
   /**
    * Удаление транзакции
    */
-  // eslint-disable-next-line
-  async remove() {
+  static async remove() {
     throw new ApplicationError('Transaction can\'t be removed', 400);
   }
 }

@@ -5,14 +5,26 @@ const http = require('http');
 const https = require('https');
 const path = require('path');
 
-const appCfg = require('./config.js');
-const { logger, tracer } = require('./libs/logger.js')(appCfg);
-const app = require('./source/app.js')(appCfg, logger, tracer);
+const configFile = path.join(__dirname, 'config', `${String(process.env.NODE_ENV || 'default').toLowerCase()}.env`);
+const config = require('dotenv').config({ path: configFile });
+const logger = require('./libs/logger.js');
+const app = require('./source/app.js');
 
-logger.trace(appCfg);
+if (config.error) {
+  logger.fatal(`Config not loaded: ${config.error.toString()}`);
+  logger.trace(config.error);
+  process.exit(1);
+}
+
+if (config.parsed) {
+  logger.debug(`Config loaded from ${configFile}`);
+  logger.trace(config.parsed);
+}
+
+const PORT = process.env.PORT || 3000;
 
 function listenCallback() {
-  logger.info(`Yet another wallet started at port: ${appCfg.listen.port}`);
+  logger.info(`Yet another wallet started at port: ${PORT}. Environment: ${process.env.NODE_ENV}`);
 }
 
 if (process.env.HTTPS) {
@@ -23,15 +35,17 @@ if (process.env.HTTPS) {
 
   https
     .createServer(protocolSecrets, app.callback())
-    .listen(appCfg.listen.port, listenCallback);
+    .listen(PORT, listenCallback);
 
-  // redirect from http to https
-  if (Number(appCfg.listen.port) === 443) {
-    http.createServer((req, res) => {
-      res.writeHead(301, { Location: `https://${req.headers.host}${req.url}` });
-      res.end();
-    }).listen(80);
+  // redirect from http to https if current port is 443
+  if (Number(PORT) === 443) {
+    http
+      .createServer((req, res) => {
+        res.writeHead(301, { Location: `https://${req.headers.host}${req.url}` });
+        res.end();
+      })
+      .listen(80);
   }
 } else {
-  app.listen(appCfg.listen.port, listenCallback);
+  app.listen(PORT, listenCallback);
 }

@@ -1,5 +1,8 @@
 build
-public
-node_modules
-source/views/index.server.js
+config
 coverage
+logs
+node_modules
+public
+school-wallet-dump
+source/views/index.server.js

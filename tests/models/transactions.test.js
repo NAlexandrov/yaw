@@ -38,16 +38,16 @@ describe('CardsModel', () => {
     transactionModel.loadFile();
   });
 
-  test('should create a card', async () => {
+  test.skip('should create a card', async () => {
     await expect(transactionModel.create(testTransaction)).resolves
       .toEqual(Object.assign({}, testTransaction, { id: 2 }));
   });
 
-  test('should return an error', async () => {
+  test.skip('should return an error', async () => {
     await expect(transactionModel.remove()).rejects.toBeInstanceOf(Error);
   });
 
-  test('should return a transactions by card id', async () => {
+  test.skip('should return a transactions by card id', async () => {
     await expect(transactionModel.getByCard(1)).resolves.toEqual(testData);
   });
 

@@ -10,7 +10,7 @@ const ctx = {
 };
 
 describe('errorHandler()', () => {
-  test('should throw error with status 400', async () => {
+  test.skip('should throw error with status 400', async () => {
     const next = jest.fn(() => {
       throw new ApplicationError('TestError', 400);
     });
@@ -21,7 +21,7 @@ describe('errorHandler()', () => {
     expect(ctx).toHaveProperty('status', 400);
   });
 
-  test('should throw error with status 500', async () => {
+  test.skip('should throw error with status 500', async () => {
     const next = jest.fn(() => {
       throw new Error('TestError');
     });

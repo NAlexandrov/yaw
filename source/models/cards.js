@@ -1,26 +1,22 @@
 'use strict';
 
-const ApplicationError = require('../../libs/application-error');
-const FileModel = require('./common/fileModel');
+const ApplicationError = require('../../libs/application-error.js');
+const MongoModel = require('./common/mongoModel.js');
 
 const has = Object.prototype.hasOwnProperty;
 
-class Cards extends FileModel {
+class Cards extends MongoModel {
   constructor(config) {
-    super(Object.assign(config, {
-      sourceFileName: 'cards.json',
-    }));
-
-    this.log = this.log.child({
-      modelName: 'Cards',
-    });
+    const modelName = 'Card';
+    super(Object.assign(config, { modelName }));
+    this.log = this.log.child({ modelName });
   }
 
   /**
    * Добавляет карту
-   *
    * @param {Object} card - описание карты
-   * @returns {Promise.<Object>}
+   * @param {String} card.cardNumber - номер карты
+   * @param {Number} card.balance - баланс карты
    */
   async create(card) {
     const log = this.log.child({
@@ -31,19 +27,42 @@ class Cards extends FileModel {
       && has.call(card, 'cardNumber')
       && has.call(card, 'balance');
 
-    if (isDataValid) {
-      const newCard = Object.assign({}, card, {
-        id: this._generateId(),
-      });
-
-      this._dataSource.push(newCard);
-      await this._saveUpdates();
-      return newCard;
+    if (!isDataValid) {
+      throw new ApplicationError('Card data is invalid', 400);
     }
 
-    const err = new ApplicationError('Card data is invalid', 400);
-    log.error({ success: false, error: err });
-    throw err;
+    const id = await this._generateId();
+    const newCard = Object.assign({}, card, { id });
+
+    await this._insert(newCard);
+
+    log.trace('New card added', newCard);
+
+    return newCard;
+  }
+
+  /**
+   * Списание средств с карты
+   * @param {Number} id идентификатор карты
+   * @param {Number} sum сумма
+   */
+  async withdraw(id, sum) {
+    const card = await this.getById(id);
+    const newBalance = Number(card.balance) - Number(sum);
+
+    await this._update({ id }, { balance: newBalance });
+  }
+
+  /**
+   * Пополнение карты
+   * @param {Number} id идентификатор карты
+   * @param {Number} sum сумма
+   */
+  async refill(id, sum) {
+    const card = await this.getById(id);
+    const newBalance = Number(card.balance) + Number(sum);
+
+    await this._update({ id }, { balance: newBalance });
   }
 
   /**
@@ -51,13 +70,21 @@ class Cards extends FileModel {
    * @param {Number} id - идентификатор карты
    */
   async remove(id) {
-    const card = await this.get(id);
+    const log = this.log.child({
+      function: 'remove',
+    });
+
+    const card = await this.getById(id);
+
     if (!card) {
       throw new ApplicationError(`Card with ID=${id} not found`, 404);
     }
-    const cardIndex = this._dataSource.indexOf(card);
-    this._dataSource.splice(cardIndex, 1);
-    await this._saveUpdates();
+
+    const result = await this._remove({ id });
+
+    log.trace(`Card #${id} removed successfully`);
+
+    return result;
   }
 }
 

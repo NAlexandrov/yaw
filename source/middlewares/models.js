@@ -15,10 +15,5 @@ module.exports = async function initModels(ctx, next) {
     logger: ctx.log,
   });
 
-  await Promise.all([
-    ctx.cardsModel.loadFile(),
-    ctx.transactionsModel.loadFile(),
-  ]);
-
   await next();
 };

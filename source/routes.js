@@ -1,63 +1,73 @@
 'use strict';
 
-const router = require('koa-joi-router');
-const { renderToStaticNodeStream } = require('react-dom/server');
+const router = require('koa-joi-router')();
 
+const indexController = require('./controllers/index.js');
 const getCardsController = require('./controllers/cards/get-cards.js');
 const createCardController = require('./controllers/cards/create.js');
 const deleteCardController = require('./controllers/cards/delete.js');
-
 const getTransactionsController = require('./controllers/transactions/get.js');
 const createTransactionsController = require('./controllers/transactions/create.js');
+const cardToMobile = require('./controllers/cards/card-to-mobile.js');
+const cardToCard = require('./controllers/cards/card-to-card.js');
+const mobileToCard = require('./controllers/cards/mobile-to-card.js');
 
-const createPayController = require('./controllers/pay/create.js');
-
-// const errorController = require('./controllers/error.js');
-const indexView = require('./views/index.server.js');
-
-const { Joi } = router;
-const route = router();
-
-async function getData(ctx) {
-  const user = {
-    login: 'samuel_johnson',
-    name: 'Samuel Johnson',
-  };
-
-  const cards = await ctx.cardsModel.getAll();
-  const transactions = await ctx.transactionsModel.getAll();
-
-  return {
-    user,
-    cards,
-    transactions,
-  };
-}
-
-route.get('/', async (ctx) => {
-  const data = await getData(ctx);
-  ctx.type = 'html';
-  ctx.body = renderToStaticNodeStream(indexView(data));
-});
-
-route.get('/cards/', getCardsController);
-route.post('/cards/', createCardController);
-route.delete('/cards/:id', deleteCardController);
-
-route.get('/cards/:id/transactions/', getTransactionsController);
-route.post('/cards/:id/transactions/', createTransactionsController);
-
-route.route({
-  method: 'post',
-  path: '/cards/:id/pay',
-  validate: {
-    type: 'json',
-    body: {
-      phoneNumber: Joi.string().required(),
-      sum: Joi.number().required(),
-    },
+/**
+ * @see {@link https://github.com/koajs/joi-router} for more information
+ * @type {Object[]} - Collection of routes
+ * @prop {String} method - HTTP method like "get", "post", "put", etc
+ * @prop {String} path - Path from URL
+ * @prop {Function} handler - async function or function
+ * @prop {Object} [meta] - meta data about this route
+ */
+const routes = [
+  {
+    method: 'get',
+    path: '/',
+    ...indexController,
   },
-  handler: createPayController,
-});
+  {
+    method: 'get',
+    path: '/cards',
+    ...getCardsController,
+  },
+  {
+    method: 'post',
+    path: '/cards',
+    ...createCardController,
+  },
+  {
+    method: 'delete',
+    path: '/cards/:id',
+    ...deleteCardController,
+  },
+  {
+    method: 'get',
+    path: '/cards/:id/transactions',
+    ...getTransactionsController,
+  },
+  {
+    method: 'post',
+    path: '/cards/:id/transactions',
+    ...createTransactionsController,
+  },
+  {
+    method: 'post',
+    path: '/cards/:id/pay',
+    ...cardToMobile,
+  },
+  {
+    method: 'post',
+    path: '/cards/:id/transfer',
+    ...cardToCard,
+  },
+  {
+    method: 'post',
+    path: '/cards/:id/fill',
+    ...mobileToCard,
+  },
+];
 
-module.exports = route;
+router.route(routes);
+
+module.exports = router;
