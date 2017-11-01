@@ -7,6 +7,7 @@ const getCardsController = require('./controllers/cards/get-cards.js');
 const createCardController = require('./controllers/cards/create.js');
 const deleteCardController = require('./controllers/cards/delete.js');
 const getTransactionsController = require('./controllers/transactions/get.js');
+const getAllTransactionsController = require('./controllers/transactions/get-all.js');
 const createTransactionsController = require('./controllers/transactions/create.js');
 const cardToMobile = require('./controllers/cards/card-to-mobile.js');
 const cardToCard = require('./controllers/cards/card-to-card.js');
@@ -65,6 +66,11 @@ const routes = [
     method: 'post',
     path: '/cards/:id/fill',
     ...mobileToCard,
+  },
+  {
+    method: 'get',
+    path: '/transactions',
+    ...getAllTransactionsController,
   },
 ];
 

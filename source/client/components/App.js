@@ -129,13 +129,13 @@ class App extends Component {
 
   /**
   * Функция вызывает при успешной транзакции
-  * @param {Number} activeCardIndex индекс выбранной карты
 	*/
-  onTransaction(activeCardId) {
+  onTransaction() {
     Promise
       .all([
         axios.get('/cards'),
-        axios.get(`/cards/${activeCardId}/transactions`),
+        axios.get('/transactions'),
+        // axios.get(`/cards/${activeCardId}/transactions`), // для будущей оптимизации
       ])
       .then(([cards, transactions]) => {
         const cardsList = App.prepareCardsData(cards.data);
@@ -206,12 +206,12 @@ class App extends Component {
               activeCard={activeCard}
               inactiveCardsList={inactiveCardsList}
               onCardChange={(newActiveCardIndex) => this.onCardChange(newActiveCardIndex)}
-              onTransaction={() => this.onTransaction(activeCard.id)} />
-            <MobilePayment activeCard={activeCard} onTransaction={() => this.onTransaction(activeCard.id)} />
+              onTransaction={() => this.onTransaction()} />
+            <MobilePayment activeCard={activeCard} onTransaction={() => this.onTransaction()} />
             <Withdraw
               activeCard={activeCard}
               inactiveCardsList={inactiveCardsList}
-              onTransaction={() => this.onTransaction(activeCard.id)} />
+              onTransaction={() => this.onTransaction()} />
           </Workspace>
         </CardPane>
       </Wallet>
