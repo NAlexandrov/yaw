@@ -5,7 +5,12 @@ const http = require('http');
 const https = require('https');
 const path = require('path');
 
-const configFile = path.join(__dirname, 'config', `${String(process.env.NODE_ENV || 'default').toLowerCase()}.env`);
+let configFile = path.join(__dirname, 'config', `${String(process.env.NODE_ENV || 'default').toLowerCase()}.env`);
+
+if (!fs.statSync(configFile).isFile()) {
+  configFile = path.join(__dirname, 'config', 'default.env');
+}
+
 const config = require('dotenv').config({ path: configFile });
 const logger = require('./libs/logger.js');
 const app = require('./source/app.js');
