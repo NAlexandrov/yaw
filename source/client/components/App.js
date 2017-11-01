@@ -132,17 +132,16 @@ class App extends Component {
   * @param {Number} activeCardIndex индекс выбранной карты
 	*/
   onTransaction(activeCardId) {
-    axios.get('/cards').then(({ data }) => {
-      const cardsList = App.prepareCardsData(data);
-      this.setState({ cardsList });
-
-      // eslint-disable-next-line
-      axios.get(`/cards/${activeCardId}/transactions`).then(({ data }) => {
-        console.log('transactions...', data);
-        const cardHistory = App.prepareHistory(cardsList, data);
-        this.setState({ cardHistory });
+    Promise
+      .all([
+        axios.get('/cards'),
+        axios.get(`/cards/${activeCardId}/transactions`),
+      ])
+      .then(([cards, transactions]) => {
+        const cardsList = App.prepareCardsData(cards.data);
+        const cardHistory = App.prepareHistory(cardsList, transactions.data);
+        this.setState({ cardsList, cardHistory });
       });
-    });
   }
 
   /**
