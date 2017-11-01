@@ -34,7 +34,7 @@ class MongoModel extends Model {
 
   async getBy(cond) {
     const data = await this._MongooseModel
-      .findOne(cond)
+      .find(cond)
       .lean()
       .exec();
 
@@ -48,11 +48,14 @@ class MongoModel extends Model {
 	 */
   async _generateId() {
     const data = await this._MongooseModel
-      .find({})
+      .find()
       .sort({ id: -1 })
       .limit(1)
-      .lean()
-      .exec();
+      .lean();
+
+    if (!data.length) {
+      return 1;
+    }
 
     return data[0].id + 1;
   }

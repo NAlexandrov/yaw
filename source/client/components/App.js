@@ -109,7 +109,6 @@ class App extends Component {
 
   /**
 	 * Обработчик переключения карты
-	 *
 	 * @param {Number} activeCardIndex индекс выбранной карты
 	 */
   onCardChange(activeCardIndex) {
@@ -129,15 +128,18 @@ class App extends Component {
   }
 
   /**
-	* Функция вызывает при успешной транзакции
+  * Функция вызывает при успешной транзакции
+  * @param {Number} activeCardIndex индекс выбранной карты
 	*/
-  onTransaction() {
-    axios.get('/cards').then(({ cards }) => {
-      const cardsList = App.prepareCardsData(cards);
+  onTransaction(activeCardId) {
+    axios.get('/cards').then(({ data }) => {
+      const cardsList = App.prepareCardsData(data);
       this.setState({ cardsList });
 
-      axios.get('/transactions').then(({ transactions }) => {
-        const cardHistory = App.prepareHistory(cardsList, transactions);
+      // eslint-disable-next-line
+      axios.get(`/cards/${activeCardId}/transactions`).then(({ data }) => {
+        console.log('transactions...', data);
+        const cardHistory = App.prepareHistory(cardsList, data);
         this.setState({ cardHistory });
       });
     });
@@ -205,12 +207,12 @@ class App extends Component {
               activeCard={activeCard}
               inactiveCardsList={inactiveCardsList}
               onCardChange={(newActiveCardIndex) => this.onCardChange(newActiveCardIndex)}
-              onTransaction={() => this.onTransaction()} />
-            <MobilePayment activeCard={activeCard} onTransaction={() => this.onTransaction()} />
+              onTransaction={() => this.onTransaction(activeCard.id)} />
+            <MobilePayment activeCard={activeCard} onTransaction={() => this.onTransaction(activeCard.id)} />
             <Withdraw
               activeCard={activeCard}
               inactiveCardsList={inactiveCardsList}
-              onTransaction={() => this.onTransaction()} />
+              onTransaction={() => this.onTransaction(activeCard.id)} />
           </Workspace>
         </CardPane>
       </Wallet>

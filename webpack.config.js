@@ -2,6 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
+const isWatch = !!process.env.WATCH;
+
 function getExternals() {
   return fs.readdirSync('node_modules')
     .concat(['react-dom/server'])
@@ -39,7 +41,7 @@ module.exports = [
     plugins: [
       new ExtractTextPlugin('[name].css'),
     ],
-    watch: false,
+    watch: isWatch,
   },
   {
     entry: {
@@ -65,6 +67,6 @@ module.exports = [
       path: path.resolve(__dirname, 'source/views'),
       libraryTarget: 'umd',
     },
-    watch: false,
+    watch: isWatch,
   },
 ];
