@@ -7,7 +7,9 @@ const path = require('path');
 
 let configFile = path.join(__dirname, 'config', `${String(process.env.NODE_ENV || 'default').toLowerCase()}.env`);
 
-if (!fs.statSync(configFile).isFile()) {
+try {
+  fs.statSync(configFile);
+} catch (err) {
   configFile = path.join(__dirname, 'config', 'default.env');
 }
 
