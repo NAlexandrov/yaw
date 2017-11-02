@@ -5,13 +5,13 @@
   "main": "index.js",
   "scripts": {
     "tls:generate": "node scripts/tls-generate.js",
-    "build": "npx webpack",
-    "lint": "npx eslint .",
+    "build": "./node_modules/.bin/webpack",
+    "lint": "./node_modules/.bin/eslint .",
     "precommit": "npm run lint",
     "start": "node index.js",
     "start:https": "HTTPS=1 node index.js",
     "watch": "WATCH=1 pm2 start ecosystem.config.js --env development --no-daemon",
-    "test": "npx jest",
+    "test": "./node_modules/.bin/jest",
     "snyk-protect": "snyk protect",
     "prepublish": "npm run snyk-protect"
   },
