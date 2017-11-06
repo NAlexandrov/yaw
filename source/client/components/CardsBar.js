@@ -42,7 +42,7 @@ const Footer = styled.footer`
 const CardsBar = ({
   // eslint-disable-next-line
   activeCardIndex, cardsList, onCardChange, onEditChange, isCardsEditable, isCardRemoving, onChangeBarMode,
-  removeCardId, deleteCard,
+  removeCardId, deleteCard, addCard,
 }) => {
   const onCardClick = (index) => {
     if (onCardChange) {
@@ -78,9 +78,9 @@ const CardsBar = ({
               onClick={() => onCardClick(index)} />
           ))
         }
-        <Card type='new' />
+        <Card type='new' addCard={addCard} />
       </CardsList>
-      <Footer>Yamoney Node School</Footer>
+      <Footer>Yet Another Wallet</Footer>
     </Layout>
   );
 };
@@ -94,6 +94,7 @@ CardsBar.propTypes = {
   isCardRemoving: PropTypes.bool.isRequired,
   deleteCard: PropTypes.func.isRequired,
   onChangeBarMode: PropTypes.func.isRequired,
+  addCard: PropTypes.func.isRequired,
 };
 
 export default CardsBar;

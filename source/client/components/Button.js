@@ -21,9 +21,11 @@ const StyledButton = styled.button`
 `;
 
 const Button = ({
-  bgColor, textColor, children, className,
+  bgColor, textColor, children, className, onClick,
 }) => (
-  <StyledButton bgColor={bgColor} textColor={textColor} className={className}>{children}</StyledButton>
+  <StyledButton bgColor={bgColor} textColor={textColor} className={className} onClick={onClick}>
+    {children}
+  </StyledButton>
 );
 
 Button.propTypes = {
@@ -31,6 +33,7 @@ Button.propTypes = {
   textColor: PropTypes.string,
   children: PropTypes.node,
   className: PropTypes.string,
+  onClick: PropTypes.func,
 };
 
 Button.defaultProps = {

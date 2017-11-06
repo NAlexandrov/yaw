@@ -30,8 +30,6 @@ module.exports = {
   },
 
   handler: async (ctx) => {
-    ctx.log.debug(ctx.request);
-
     const cardId = ctx.params.id;
 
     const operation = ctx.request.body;

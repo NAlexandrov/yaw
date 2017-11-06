@@ -3,7 +3,9 @@
 const mongoose = require('mongoose');
 const utils = require('../../../libs/utils');
 
-const Card = mongoose.model('Card', {
+const { Schema } = mongoose;
+
+const cardSchema = new Schema({
   id: {
     type: Number,
     required: true,
@@ -22,6 +24,10 @@ const Card = mongoose.model('Card', {
     type: Number,
     required: true,
   },
+  userId: {
+    type: Number,
+    required: true,
+  },
 });
 
-module.exports = Card;
+module.exports = mongoose.model('Card', cardSchema);

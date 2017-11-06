@@ -62,6 +62,7 @@
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-emotion": "^8.0.9",
+    "react-gravatar": "^2.6.3",
     "serialize-javascript": "^1.4.0",
     "snyk": "^1.46.0",
     "style-loader": "^0.19.0",
