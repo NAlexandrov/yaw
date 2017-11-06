@@ -1,0 +1,33 @@
+{
+    // Используйте IntelliSense, чтобы узнать о возможных атрибутах.
+    // Наведите указатель мыши, чтобы просмотреть описания существующих атрибутов.
+    // Для получения дополнительной информации посетите: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Main",
+        "program": "${workspaceFolder}/index.js"
+      },
+      {
+          "type": "node",
+          "request": "launch",
+          "name": "Service Reports",
+          "program": "${workspaceFolder}/services/reports/index.js"
+      },
+      {
+          "type": "node",
+          "request": "launch",
+          "name": "Service Reports Pdf",
+          "program": "${workspaceFolder}/services/reports/source/render-pdf.js"
+      },
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Service Reports unoconv",
+        "program": "${workspaceFolder}/services/reports/source/unoconv.js"
+      }
+  ]
+}
