@@ -95,7 +95,7 @@ const Icon = styled.div`
   }
 `;
 
-const History = ({ cardHistory }) => {
+const History = ({ activeCard, cardHistory }) => {
   const getHistoryItemTitle = (item) => {
     let typeTitle = '';
 
@@ -149,20 +149,24 @@ const History = ({ cardHistory }) => {
       : <HistoryContent>{content}</HistoryContent>;
   };
 
+  const docxUrl = `/cards/${activeCard.id}/transactions.docx`;
+  const pdfUrl = `/cards/${activeCard.id}/transactions.pdf`;
+  const xlsxUrl = `/cards/${activeCard.id}/transactions.xlsx`;
+
   return (
     <HistoryLayout>
       <HistoryTitle>
         Сегодня
         <Icon>
-          <a href='/reports/transactions.docx'>
+          <a href={docxUrl}>
             <FontAwesome name='file-word-o' />
           </a>
           &nbsp;&nbsp;
-          <a href='/reports/transactions.pdf'>
+          <a href={pdfUrl}>
             <FontAwesome name='file-pdf-o' />
           </a>
           &nbsp;&nbsp;
-          <a href='/reports/transactions.xlsx'>
+          <a href={xlsxUrl}>
             <FontAwesome name='file-excel-o' />
           </a>
         </Icon>
@@ -173,6 +177,9 @@ const History = ({ cardHistory }) => {
 };
 
 History.propTypes = {
+  activeCard: PropTypes.shape({
+    id: PropTypes.number,
+  }).isRequired,
   cardHistory: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 

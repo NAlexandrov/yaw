@@ -84,17 +84,17 @@ const routes = [
   },
   {
     method: 'get',
-    path: '/reports/transactions.xlsx',
+    path: '/cards/:id/transactions.xlsx',
     ...getTransactionsXLSX,
   },
   {
     method: 'get',
-    path: '/reports/transactions.docx',
+    path: '/cards/:id/transactions.docx',
     ...getTransactionsDOCX,
   },
   {
     method: 'get',
-    path: '/reports/transactions.pdf',
+    path: '/cards/:id/transactions.pdf',
     ...getTransactionsPDF,
   },
 ];
