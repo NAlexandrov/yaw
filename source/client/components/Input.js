@@ -12,7 +12,24 @@ const StyledInput = styled.input`
 	background-color: rgba(0, 0, 0, 0.2);
 	font-size: 15px;
 	line-height: 1.5;
-	color: ${({ textColor }) => textColor};
+  color: ${({ textColor }) => textColor};
+
+  ::-webkit-input-placeholder {
+    color: ${({ placeholderColor }) => placeholderColor};
+    opacity: 0.5;
+  }
+  ::-moz-placeholder {
+    color: ${({ placeholderColor }) => placeholderColor};
+    opacity: 0.5;
+  }
+  :-ms-input-placeholder {
+    color: ${({ placeholderColor }) => placeholderColor};
+    opacity: 0.5;
+  }
+  :-moz-placeholder {
+    color: ${({ placeholderColor }) => placeholderColor};
+    opacity: 0.5;
+  }
 `;
 
 const Input = (props) => (
@@ -21,10 +38,12 @@ const Input = (props) => (
 
 Input.propTypes = {
   textColor: PropTypes.string,
+  placeholderColor: PropTypes.string,
 };
 
 Input.defaultProps = {
   textColor: '#fff',
+  placeholderColor: '#ccc',
 };
 
 export default Input;

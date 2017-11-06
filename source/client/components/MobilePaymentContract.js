@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 import axios from 'axios';
 
+import loading from './helpers/loading';
 import errorHandler from './helpers/errorHandler';
 import { Island, Title, Button, Input } from './';
 
@@ -50,7 +51,7 @@ const Underline = styled.div`
 `;
 
 const PaymentButton = styled(Button)`
-	float: right;
+  float: right;
 `;
 
 const InputPhoneNumber = styled(Input)`
@@ -80,9 +81,10 @@ class MobilePaymentContract extends Component {
     super(props);
 
     this.state = {
-      phoneNumber: '+79218908064',
-      sum: 0,
+      phoneNumber: '',
+      sum: 500,
       commission: 3,
+      submitDisabled: true,
     };
   }
 
@@ -104,17 +106,36 @@ class MobilePaymentContract extends Component {
 
     const { activeCard } = this.props;
 
+    if (activeCard.balance < Number(sum)) {
+      return errorHandler('У вас недостаточно средств');
+    }
+
+    const phoneNum = phoneNumber.match(/\d/g);
+
+    if (!phoneNum) {
+      return errorHandler('Введен некорректный номер телефона');
+    }
+
+    const hide = loading('Подождите...');
+
     return axios
-      .post(`/cards/${activeCard.id}/pay`, { phoneNumber, sum })
+      .post(`/cards/${activeCard.id}/pay`, {
+        phoneNumber: phoneNum.join(''),
+        sum,
+      })
       .then((res) => {
-        this.props.onPaymentSuccess({
-          id: res.data.id,
-          sum: res.data.sum,
-          phoneNumber,
+        hide();
+
+        const { id, sum: summa, data: phone = {} } = res.data;
+        const transaction = Object.assign({}, phone, {
+          id,
+          sum: summa,
           commission,
         });
+
+        this.props.onPaymentSuccess(transaction);
       })
-      .catch(errorHandler);
+      .catch(errorHandler(hide));
   }
 
   /**
@@ -130,6 +151,7 @@ class MobilePaymentContract extends Component {
 
     this.setState({
       [name]: value,
+      submitDisabled: !(this.isValid(value) && this.isValidPhone()),
     });
   }
 
@@ -146,6 +168,7 @@ class MobilePaymentContract extends Component {
 
     this.setState({
       [name]: value,
+      submitDisabled: !(this.isValid() && this.isValidPhone(value)),
     });
   }
 
@@ -164,6 +187,35 @@ class MobilePaymentContract extends Component {
     return Number(sum) + Number(commission);
   }
 
+  isValid(value) {
+    const sum = value || this.state.sum;
+    const { activeCard } = this.props;
+    const isNumber = !isNaN(parseFloat(sum)) && isFinite(sum);
+
+    if (!isNumber || Number(sum) <= 0) {
+      return false;
+    }
+
+    if (activeCard.balance < Number(sum)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  isValidPhone(value) {
+    const phoneNumber = value || String(this.state.phoneNumber);
+    let numbers = phoneNumber.match(/\d/g);
+
+    if (!numbers) {
+      return false;
+    }
+
+    numbers = numbers.map((v) => parseInt(v, 10));
+
+    return numbers.length === 11 && numbers[0] === 7 && numbers[1] === 9;
+  }
+
   /**
 	 * Рендер компонента
 	 *
@@ -171,7 +223,7 @@ class MobilePaymentContract extends Component {
 	 * @returns {JSX}
 	 */
   render() {
-    const { commission } = this.state;
+    const { commission, submitDisabled } = this.state;
 
     return (
       <MobilePaymentLayout>
@@ -181,7 +233,9 @@ class MobilePaymentContract extends Component {
             <Label>Телефон</Label>
             <InputPhoneNumber
               name='phoneNumber'
+              required='required'
               value={this.state.phoneNumber}
+              placeholder='Введите номер телефона'
               onChange={(event) => this.onChangePhoneNumber(event)} />
           </InputField>
           <InputField>
@@ -190,18 +244,20 @@ class MobilePaymentContract extends Component {
               name='sum'
               type='number'
               min='1'
+              required='required'
+              step='any'
               value={this.state.sum}
               onChange={(event) => this.onChangeInputValue(event)} />
             <Currency>₽</Currency>
           </InputField>
           <InputField>
             <Label>Спишется</Label>
-            <InputCommision value={this.getSumWithCommission()} />
+            <InputCommision value={this.getSumWithCommission()} readOnly />
             <Currency>₽</Currency>
           </InputField>
           <Commission>Размер коммиссии составляет {commission} ₽</Commission>
           <Underline />
-          <PaymentButton bgColor='#fff' textColor='#108051'>Заплатить</PaymentButton>
+          <PaymentButton bgColor='#fff' textColor='#108051' disabled={submitDisabled}>Пополнить</PaymentButton>
         </form>
       </MobilePaymentLayout>
     );
@@ -211,6 +267,7 @@ class MobilePaymentContract extends Component {
 MobilePaymentContract.propTypes = {
   activeCard: PropTypes.shape({
     id: PropTypes.number,
+    balance: PropTypes.number.isRequired,
   }).isRequired,
   onPaymentSuccess: PropTypes.func.isRequired,
 };

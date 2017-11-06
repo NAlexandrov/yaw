@@ -127,15 +127,20 @@ class PrepaidContract extends Component {
     const selectedCard = inactiveCardsList[activeCardIndex];
 
     const isNumber = !isNaN(parseFloat(sum)) && isFinite(sum);
-    if (!isNumber || sum <= 0) {
+    if (!isNumber || Number(sum) <= 0) {
       return errorHandler('Введите корректную сумму пополнения');
+    }
+
+    if (selectedCard.balance < Number(sum)) {
+      console.log(selectedCard);
+      return errorHandler('У вас недостаточно средств');
     }
 
     const options = {
       method: 'post',
-      url: `/cards/${activeCard.id}/transfer`,
+      url: `/cards/${selectedCard.id}/transfer`,
       data: {
-        target: selectedCard.id,
+        target: activeCard.id,
         sum,
       },
     };
@@ -143,7 +148,7 @@ class PrepaidContract extends Component {
     return axios(options)
       .then(() => this.props.onPaymentSuccess({
         sum,
-        number: activeCard.number,
+        number: selectedCard.number,
       }))
       .catch(errorHandler);
   }
@@ -201,6 +206,8 @@ class PrepaidContract extends Component {
               type='number'
               min='1'
               value={this.state.sum}
+              required='required'
+              step='any'
               onChange={(event) => this.onChangeInputValue(event)} />
             <Currency>₽</Currency>
           </InputField>

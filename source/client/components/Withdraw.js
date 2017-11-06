@@ -124,6 +124,8 @@ class Withdraw extends Component {
               name='sum'
               type='number'
               min='1'
+              required='required'
+              step='any'
               value={this.state.sum}
               onChange={(event) => this.onChangeInputValue(event)} />
             <Currency>₽</Currency>

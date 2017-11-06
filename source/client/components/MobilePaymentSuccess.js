@@ -25,7 +25,8 @@ const Header = styled.div`
 `;
 
 const Sum = styled.div`
-	font-size: 48px;
+  padding-top: 10px !important;
+  font-size: 48px;
 `;
 
 const CommissionTips = styled.div`
@@ -81,9 +82,16 @@ const Link = styled.a`
   }
 `;
 
+const City = styled.span`
+  display: block;
+  opacity: 0.6;
+  font-size: 16px;
+  margin-top: -5px;
+`;
+
 const MobilePaymentSuccess = ({ user, transaction, repeatPayment }) => {
   const {
-    id, sum, phoneNumber, commission,
+    id, sum, phoneNumber, commission, city = 'Россия', name = 'Неизвестный оператор',
   } = transaction;
 
   const { email } = user;
@@ -92,7 +100,7 @@ const MobilePaymentSuccess = ({ user, transaction, repeatPayment }) => {
   return (
     <MobilePaymentLayout>
       <SuccessIcon />
-      <Header>МегаФон (Россия)</Header>
+      <Header>{name} <City>{city}</City></Header>
       <Sum>{sum} ₽</Sum>
       <CommissionTips>В том числе комиссия {commission} ₽</CommissionTips>
       <Section>
@@ -101,7 +109,7 @@ const MobilePaymentSuccess = ({ user, transaction, repeatPayment }) => {
       </Section>
       <Section>
         <SectionLabel>Номер телефона</SectionLabel>
-        <SectionValue>{phoneNumber}</SectionValue>
+        <SectionValue>+{phoneNumber}</SectionValue>
       </Section>
       <Instruction>
         Мы пришлем чек на <Link href={mailto}> {email}</Link>.
@@ -119,6 +127,8 @@ MobilePaymentSuccess.propTypes = {
     sum: PropTypes.number,
     phoneNumber: PropTypes.string,
     commission: PropTypes.number,
+    name: PropTypes.string,
+    city: PropTypes.string,
   }).isRequired,
   repeatPayment: PropTypes.func.isRequired,
 };

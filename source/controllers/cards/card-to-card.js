@@ -48,6 +48,16 @@ module.exports = {
       sum,
     });
 
+    await ctx.transactionsModel.create({
+      cardId: targetCard.id,
+      type: 'prepaidCard',
+      data: {
+        cardNumber: sourceCard.cardNumber,
+      },
+      time: new Date().toISOString(),
+      sum,
+    });
+
     ctx.status = 200;
     ctx.body = transaction;
   },

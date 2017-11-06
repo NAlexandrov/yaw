@@ -1,6 +1,6 @@
 import { message } from 'antd';
 
-function errorHandler(err) {
+function showError(err) {
   if (typeof err === 'string') {
     return message.error(err);
   }
@@ -13,6 +13,17 @@ function errorHandler(err) {
   }
 
   return message.error(`${errorTitle}`);
+}
+
+function errorHandler(err) {
+  if (typeof err === 'function') {
+    return (msg) => {
+      err();
+      showError(msg);
+    };
+  }
+
+  return showError(err);
 }
 
 export default errorHandler;
