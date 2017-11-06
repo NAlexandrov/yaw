@@ -35,7 +35,7 @@ module.exports = {
     };
 
     const opt = {
-      url: 'http://localhost:3333/docx',
+      url: `http://localhost:${process.env.REPORT_SERVICE_PORT || 3333}/docx`,
       encoding: null,
       formData,
     };

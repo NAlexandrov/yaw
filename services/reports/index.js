@@ -73,7 +73,7 @@ router.post('/pdfmake', koaBody, async (ctx) => {
 
 app.use(router.routes());
 
-const PORT = process.env.PORT || 3333;
+const PORT = process.env.REPORT_SERVICE_PORT || 3333;
 
 app.listen(PORT, 'localhost', () => {
   /* eslint no-console:0 max-len:0 */
