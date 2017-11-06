@@ -19,6 +19,7 @@ const koaBody = require('koa-body')({ multipart: true });
 
 const renderDocx = require('./source/render-docx');
 const renderPdf = require('./source/render-pdf');
+const renderXlsx = require('./source/render-xlsx');
 
 const app = new Koa();
 
@@ -40,6 +41,20 @@ router.post('/pdf', koaBody, async (ctx, next) => {
   const tmplData = JSON.parse(ctx.request.body.fields.tmpl_data);
 
   const buf = await renderPdf(tmplFile, tmplData);
+
+  ctx.status = 200;
+  ctx.body = buf;
+  next();
+  // for test
+  // fs.writeFileSync(`${__dirname}/temp/result.pdf`, buf);
+});
+
+router.post('/xlsx', koaBody, async (ctx, next) => {
+  const body1 = ctx.request.body;
+  // const tmplFile = ctx.request.body.files.tmpl_file.path;
+  // const tmplData = JSON.parse(ctx.request.body.fields.tmpl_data);
+
+  const buf = renderXlsx(body1);
 
   ctx.status = 200;
   ctx.body = buf;
