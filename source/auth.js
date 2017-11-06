@@ -25,15 +25,12 @@ passport.deserializeUser(async (id, done) => {
 
 const YandexStrategy = require('passport-yandex').Strategy;
 
-const YANDEX_CLIENT_ID = '5afe0eea0970460281e088e0cd73c85d';
-const YANDEX_CLIENT_SECRET = 'aa6dd55eace04420a005db91323d90f2';
-
 passport.use(
   new YandexStrategy(
     {
-      clientID: YANDEX_CLIENT_ID,
-      clientSecret: YANDEX_CLIENT_SECRET,
-      callbackURL: '/auth/yandex/callback',
+      clientID: process.env.YANDEX_CLIENT_ID,
+      clientSecret: process.env.YANDEX_CLIENT_SECRET,
+      callbackURL: process.env.YANDEX_CALLBACK_URL || '/auth/yandex/callback',
     },
     (async (token, tokenSecret, profile, done) => {
       try {
@@ -61,19 +58,12 @@ passport.use(
 
 const GoogleStrategy = require('passport-google-auth').Strategy;
 
-const GOOGLE_CLIENT_ID =
-  '364365817647-sfuvcchnk9t7j9hlueh6bh7fee27k7j2.apps.googleusercontent.com';
-const GOOGLE_CLIENT_SECRET = 'FPMSrABA7qoDBWK5e6QjhRlE';
-
 passport.use(
   new GoogleStrategy(
     {
-      clientId: GOOGLE_CLIENT_ID,
-      clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL:
-      `http://localhost:${
-        process.env.PORT || 8000
-      }/auth/google/callback`,
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: process.env.GOOGLE_CALLBACK_URL,
     },
     (async (token, tokenSecret, profile, done) => {
       try {
