@@ -110,17 +110,23 @@ class MobilePaymentContract extends Component {
       return errorHandler('У вас недостаточно средств');
     }
 
-    const phoneNum = phoneNumber.match(/\d/g);
+    let phoneNum = phoneNumber.match(/\d/g);
 
     if (!phoneNum) {
       return errorHandler('Введен некорректный номер телефона');
+    }
+
+    phoneNum = phoneNum.join('');
+
+    if (phoneNum.length === 10) {
+      phoneNum = `7${phoneNum}`;
     }
 
     const hide = loading('Подождите...');
 
     return axios
       .post(`/cards/${activeCard.id}/pay`, {
-        phoneNumber: phoneNum.join(''),
+        phoneNumber: phoneNum,
         sum,
       })
       .then((res) => {
@@ -212,6 +218,10 @@ class MobilePaymentContract extends Component {
     }
 
     numbers = numbers.map((v) => parseInt(v, 10));
+
+    if (numbers.length === 10) {
+      return numbers[0] === 9;
+    }
 
     return numbers.length === 11 && numbers[0] === 7 && numbers[1] === 9;
   }
