@@ -107,6 +107,10 @@ class Withdraw extends Component {
   render() {
     const { inactiveCardsList } = this.props;
 
+    if (!inactiveCardsList.length) {
+      return '';
+    }
+
     return (
       <form onSubmit={(event) => this.onSubmitForm(event)}>
         <WithdrawLayout>
@@ -129,7 +133,7 @@ class Withdraw extends Component {
 Withdraw.propTypes = {
   activeCard: PropTypes.shape({
     id: PropTypes.number,
-  }).isRequired,
+  }),
   inactiveCardsList: PropTypes.arrayOf(PropTypes.object).isRequired,
   onTransaction: PropTypes.func.isRequired,
 };

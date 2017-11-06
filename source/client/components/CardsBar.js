@@ -80,7 +80,7 @@ const CardsBar = ({
         }
         <Card type='new' />
       </CardsList>
-      <Footer>Yamoney Node School</Footer>
+      <Footer>Yet Another Wallet</Footer>
     </Layout>
   );
 };

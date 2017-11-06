@@ -1,14 +1,26 @@
 const passport = require('koa-passport');
 
-const User = require('./models/schema/user.js');
+const looger = require('../libs/logger.js');
+const UsersModel = require('./models/users.js');
 
-passport.serializeUser((user, done) => {
-  // eslint-disable-next-line
-  done(null, user._id); 
+const Users = new UsersModel({
+  logger: looger.child({ component: 'auth' }),
 });
 
-passport.deserializeUser((id, done) => {
-  User.findById(id, done);
+passport.serializeUser((user, done) => done(null, user.id));
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await Users.getById(id);
+
+    if (!user) {
+      return done(new Error('No User'));
+    }
+
+    return done(null, user);
+  } catch (err) {
+    return done(err);
+  }
 });
 
 const YandexStrategy = require('passport-yandex').Strategy;
@@ -23,19 +35,26 @@ passport.use(
       clientSecret: YANDEX_CLIENT_SECRET,
       callbackURL: '/auth/yandex/callback',
     },
-    ((token, tokenSecret, profile, done) => {
-      // retrieve user
-      User.findOne({ yandex_id: profile.id }).then((existingUser) => {
+    (async (token, tokenSecret, profile, done) => {
+      try {
+        const existingUser = await Users.findOne({ yandex_id: profile.id });
+
         if (existingUser) {
           return done(null, existingUser);
         }
-        new User({
+
+        const newUser = await Users.create({
+          login: profile.username,
+          // eslint-disable-next-line
+          name: profile._json.real_name || profile.displayName,
+          email: profile.emails[0].value,
           yandex_id: profile.id,
-        })
-          .save()
-          .then((user) => done(null, user));
-        return true;
-      });
+        });
+
+        return done(null, newUser);
+      } catch (err) {
+        return done(err);
+      }
     }),
   ),
 );
@@ -52,23 +71,35 @@ passport.use(
       clientId: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
       callbackURL:
-        `http://localhost:${
-          process.env.PORT || 8000
-        }/auth/google/callback`,
+      `http://localhost:${
+        process.env.PORT || 8000
+      }/auth/google/callback`,
     },
-    ((token, tokenSecret, profile, done) => {
-      // retrieve user
-      User.findOne({ google_id: profile.id }).then((existingUser) => {
+    (async (token, tokenSecret, profile, done) => {
+      try {
+        const existingUser = await Users.findOne({ google_id: profile.id });
+
         if (existingUser) {
           return done(null, existingUser);
         }
-        new User({
+
+        let { emails } = profile;
+
+        if (emails.find((v) => (v.type === 'account'))) {
+          emails = emails.filter((v) => (v.type === 'account'));
+        }
+
+        const newUser = await Users.create({
+          login: emails[0].value,
+          name: profile.displayName,
+          email: emails[0].value,
           google_id: profile.id,
-        })
-          .save()
-          .then((user) => done(null, user));
-        return true;
-      });
+        });
+
+        return done(null, newUser);
+      } catch (err) {
+        return done(err);
+      }
     }),
   ),
 );

@@ -41,6 +41,15 @@ class MongoModel extends Model {
     return data;
   }
 
+  async findOne(cond) {
+    const data = await this._MongooseModel
+      .findOne(cond)
+      .lean()
+      .exec();
+
+    return data;
+  }
+
   /**
 	 * Генерирует новый id для записи
 	 * @return {Number}

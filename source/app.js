@@ -24,34 +24,25 @@ const convert = require('koa-convert');
 const session = require('koa-generic-session');
 const MongoStore = require('koa-generic-session-mongo');
 
-app.use(
-  convert(
-    session({
-      store: new MongoStore(),
-    }),
-  ),
-);
-
 app.keys = [
   '5afe0eea0970460281e088e0cd73c85d',
   'aa6dd55eace04420a005db91323d90f2',
 ];
 
-// body parser
-const bodyParser = require('koa-bodyparser');
-
-app.use(bodyParser());
+app.use(
+  convert(
+    session({
+      store: new MongoStore({
+        url: process.env.DB,
+      }),
+    }),
+  ),
+);
 
 require('./auth');
 
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.use(applyLogger(logger));
-app.use(errorHandler);
-app.use(models);
-app.use(router.middleware());
-app.use(serve(path.join(__dirname, '..', 'public')));
 
 app.use(route.get('/auth/yandex', passport.authenticate('yandex')));
 
@@ -76,5 +67,11 @@ app.use(
     }),
   ),
 );
+
+app.use(applyLogger(logger));
+app.use(errorHandler);
+app.use(models);
+app.use(router.middleware());
+app.use(serve(path.join(__dirname, '..', 'public')));
 
 module.exports = app;
