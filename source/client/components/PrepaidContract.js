@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 import axios from 'axios';
 
+import errorHandler from './helpers/errorHandler';
 import { Island, Title, Button, Input } from './';
 
 const PrepaidLayout = styled(Island)`
@@ -127,7 +128,7 @@ class PrepaidContract extends Component {
 
     const isNumber = !isNaN(parseFloat(sum)) && isFinite(sum);
     if (!isNumber || sum <= 0) {
-      return;
+      return errorHandler('Введите корректную сумму пополнения');
     }
 
     const options = {
@@ -139,10 +140,12 @@ class PrepaidContract extends Component {
       },
     };
 
-    axios(options).then(() => this.props.onPaymentSuccess({
-      sum,
-      number: activeCard.number,
-    }));
+    return axios(options)
+      .then(() => this.props.onPaymentSuccess({
+        sum,
+        number: activeCard.number,
+      }))
+      .catch(errorHandler);
   }
 
   /**
@@ -195,6 +198,8 @@ class PrepaidContract extends Component {
           <InputField>
             <SumInput
               name='sum'
+              type='number'
+              min='1'
               value={this.state.sum}
               onChange={(event) => this.onChangeInputValue(event)} />
             <Currency>₽</Currency>

@@ -2,6 +2,7 @@
 'use strict';
 
 const { Joi } = require('koa-joi-router');
+const MobileOperatorDetector = require('../../../libs/mobile-operator-detector.js');
 
 const commission = 3;
 
@@ -25,7 +26,7 @@ module.exports = {
     },
     body: {
       phoneNumber: Joi.string().required(),
-      sum: Joi.number().required(),
+      sum: Joi.number().positive().required(),
     },
   },
 
@@ -35,12 +36,21 @@ module.exports = {
     const operation = ctx.request.body;
     const { sum, phoneNumber } = operation;
 
+    let operator = {};
+
+    try {
+      const phone = new MobileOperatorDetector(phoneNumber);
+      operator = await phone.getOperator();
+    } catch (err) {
+      ctx.log.warn(err);
+    }
+
     await ctx.cardsModel.withdraw(cardId, parseInt(sum, 10) + commission);
 
     const transaction = await ctx.transactionsModel.create({
       cardId,
       type: 'paymentMobile',
-      data: { phoneNumber },
+      data: { phoneNumber, ...operator },
       time: new Date().toISOString(),
       sum,
     });

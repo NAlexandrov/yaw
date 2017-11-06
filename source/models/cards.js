@@ -25,10 +25,20 @@ class Cards extends MongoModel {
 
     const isDataValid = card
       && has.call(card, 'cardNumber')
-      && has.call(card, 'balance');
+      && has.call(card, 'balance')
+      && has.call(card, 'userId');
 
     if (!isDataValid) {
       throw new ApplicationError('Card data is invalid', 400);
+    }
+
+    const isCardExist = await this.findOne({
+      cardNumber: card.cardNumber,
+      userId: card.userId,
+    });
+
+    if (isCardExist) {
+      throw new ApplicationError('Card already exist', 400);
     }
 
     const id = await this._generateId();

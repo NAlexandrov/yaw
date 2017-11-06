@@ -71,8 +71,23 @@ const RepeatPayment = styled.button`
 	text-transform: uppercase;
 `;
 
-const MobilePaymentSuccess = ({ transaction, repeatPayment }) => {
-  const { sum, phoneNumber, commission } = transaction;
+const Link = styled.a`
+  color: #fff;
+  border-bottom: 1px solid #fff;
+  &:focus,
+  &:hover {
+    color: #fff;
+    border: none;
+  }
+`;
+
+const MobilePaymentSuccess = ({ user, transaction, repeatPayment }) => {
+  const {
+    id, sum, phoneNumber, commission,
+  } = transaction;
+
+  const { email } = user;
+  const mailto = `mailto:${email}`;
 
   return (
     <MobilePaymentLayout>
@@ -82,23 +97,26 @@ const MobilePaymentSuccess = ({ transaction, repeatPayment }) => {
       <CommissionTips>В том числе комиссия {commission} ₽</CommissionTips>
       <Section>
         <SectionLabel>Номер транзакции</SectionLabel>
-        <SectionValue>200580211311</SectionValue>
+        <SectionValue>{id}</SectionValue>
       </Section>
       <Section>
         <SectionLabel>Номер телефона</SectionLabel>
         <SectionValue>{phoneNumber}</SectionValue>
       </Section>
       <Instruction>
-        Мы пришлем чек на sam@yandex.ru. Вы можете изменить email в «Настройках».
+        Мы пришлем чек на <Link href={mailto}> {email}</Link>.
       </Instruction>
       <RepeatPayment onClick={repeatPayment}>Отправить еще один перевод</RepeatPayment>
-    </MobilePaymentLayout>
+    </MobilePaymentLayout >
   );
 };
 
 MobilePaymentSuccess.propTypes = {
+  user: PropTypes.shape({
+    email: PropTypes.string.isRequired,
+  }),
   transaction: PropTypes.shape({
-    sum: PropTypes.string,
+    sum: PropTypes.number,
     phoneNumber: PropTypes.string,
     commission: PropTypes.number,
   }).isRequired,

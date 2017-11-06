@@ -22,7 +22,7 @@ module.exports = {
     },
     body: {
       phoneNumber: Joi.string().required(),
-      sum: Joi.number().required(),
+      sum: Joi.number().positive().required(),
     },
   },
 

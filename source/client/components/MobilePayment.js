@@ -44,11 +44,12 @@ class MobilePayment extends Component {
 	 * @returns {JSX}
 	 */
   render() {
-    const { activeCard } = this.props;
+    const { activeCard, user } = this.props;
 
     if (this.state.stage === 'success') {
       return (
         <MobilePaymentSuccess
+          user={user}
           activeCard={activeCard}
           transaction={this.state.transaction}
           repeatPayment={() => this.repeatPayment()} />
@@ -64,6 +65,9 @@ class MobilePayment extends Component {
 }
 
 MobilePayment.propTypes = {
+  user: PropTypes.shape({
+    email: PropTypes.string.isRequired,
+  }),
   activeCard: PropTypes.shape({
     id: PropTypes.number,
     theme: PropTypes.object,

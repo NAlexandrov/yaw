@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 import axios from 'axios';
 
+import errorHandler from './helpers/errorHandler';
 import { Card, Title, Button, Island, Input } from './';
 
 const WithdrawTitle = styled(Title)`
@@ -82,7 +83,7 @@ class Withdraw extends Component {
 
     const isNumber = !isNaN(parseFloat(sum)) && isFinite(sum);
     if (!isNumber || sum <= 0) {
-      return;
+      return errorHandler('Введите корректную сумму для вывода с карты');
     }
 
     const options = {
@@ -94,10 +95,12 @@ class Withdraw extends Component {
       },
     };
 
-    axios(options).then(() => {
-      this.props.onTransaction();
-      this.setState({ sum: 0 });
-    });
+    return axios(options)
+      .then(() => {
+        this.props.onTransaction();
+        this.setState({ sum: 0 });
+      })
+      .catch(errorHandler);
   }
 
   /**
@@ -119,6 +122,8 @@ class Withdraw extends Component {
           <InputField>
             <SumInput
               name='sum'
+              type='number'
+              min='1'
               value={this.state.sum}
               onChange={(event) => this.onChangeInputValue(event)} />
             <Currency>₽</Currency>

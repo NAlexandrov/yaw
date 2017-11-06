@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 import axios from 'axios';
 
+import errorHandler from './helpers/errorHandler';
 import { Island, Title, Button, Input } from './';
 
 const MobilePaymentLayout = styled(Island)`
@@ -95,24 +96,48 @@ class MobilePaymentContract extends Component {
     }
 
     const { sum, phoneNumber, commission } = this.state;
-
     const isNumber = !isNaN(parseFloat(sum)) && isFinite(sum);
-    if (!isNumber || sum === 0) {
-      return;
+
+    if (!isNumber || Number(sum) === 0) {
+      return errorHandler('Введите корректную сумму пополнения');
     }
 
     const { activeCard } = this.props;
 
-    axios
+    return axios
       .post(`/cards/${activeCard.id}/pay`, { phoneNumber, sum })
-      .then(() => this.props.onPaymentSuccess({ sum, phoneNumber, commission }));
+      .then((res) => {
+        this.props.onPaymentSuccess({
+          id: res.data.id,
+          sum: res.data.sum,
+          phoneNumber,
+          commission,
+        });
+      })
+      .catch(errorHandler);
   }
 
   /**
 	 * Обработка изменения значения в input
-	 * @param {Event} event событие изменения значения input
+	 * @param {Event} event - событие изменения значения input
 	 */
   onChangeInputValue(event) {
+    if (!event) {
+      return;
+    }
+
+    const { name, value } = event.target;
+
+    this.setState({
+      [name]: value,
+    });
+  }
+
+  /**
+   * Обработка изменения значения в input phoneNumber
+   * @param {Event} event - событие изменения
+   */
+  onChangePhoneNumber(event) {
     if (!event) {
       return;
     }
@@ -157,12 +182,14 @@ class MobilePaymentContract extends Component {
             <InputPhoneNumber
               name='phoneNumber'
               value={this.state.phoneNumber}
-              readOnly='true' />
+              onChange={(event) => this.onChangePhoneNumber(event)} />
           </InputField>
           <InputField>
             <Label>Сумма</Label>
             <InputSum
               name='sum'
+              type='number'
+              min='1'
               value={this.state.sum}
               onChange={(event) => this.onChangeInputValue(event)} />
             <Currency>₽</Currency>

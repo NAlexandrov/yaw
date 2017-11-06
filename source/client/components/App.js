@@ -5,6 +5,7 @@ import { injectGlobal } from 'emotion';
 import CardInfo from 'card-info';
 import axios from 'axios';
 
+import errorHandler from './helpers/errorHandler';
 import {
   CardsBar,
   Header,
@@ -143,7 +144,8 @@ class App extends Component {
         const cardsList = App.prepareCardsData(cards.data);
         const cardHistory = App.prepareHistory(cardsList, transactions.data);
         this.setState({ cardsList, cardHistory });
-      });
+      })
+      .catch(errorHandler);
   }
 
   /**
@@ -170,7 +172,8 @@ class App extends Component {
         .then(({ data }) => {
           const cardsList = App.prepareCardsData(data);
           this.setState({ cardsList });
-        }));
+        }))
+      .catch(errorHandler);
   }
 
   /**
@@ -180,12 +183,11 @@ class App extends Component {
   deleteCard(id) {
     return axios
       .delete(`/cards/${id}`)
-      .then(() => {
-        axios.get('/cards').then(({ data }) => {
-          const cardsList = App.prepareCardsData(data);
-          this.setState({ cardsList });
-        });
-      });
+      .then(() => axios.get('/cards').then(({ data }) => {
+        const cardsList = App.prepareCardsData(data);
+        this.setState({ cardsList });
+      }))
+      .catch(errorHandler);
   }
 
   /**
@@ -249,7 +251,7 @@ class App extends Component {
               inactiveCardsList={inactiveCardsList}
               onCardChange={(newActiveCardIndex) => this.onCardChange(newActiveCardIndex)}
               onTransaction={() => this.onTransaction()} />
-            <MobilePayment activeCard={activeCard} onTransaction={() => this.onTransaction()} />
+            <MobilePayment user={user} activeCard={activeCard} onTransaction={() => this.onTransaction()} />
             <Withdraw
               activeCard={activeCard}
               inactiveCardsList={inactiveCardsList}
