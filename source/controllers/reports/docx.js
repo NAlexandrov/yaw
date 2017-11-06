@@ -2,12 +2,19 @@
 
 const fs = require('fs');
 const request = require('request');
+const moment = require('moment');
+
+const renderPaymentType = require('../../../libs/render-payment-type.js');
+
+moment.locale('ru');
 
 // http://localhost:8000/reports/transactions.docx
 
 module.exports = {
   handler: async (ctx) => {
-    const transacations = await ctx.transactionsModel.getAll();
+    const transacations = await ctx.transactionsModel.getBy({
+      userId: ctx.state.user.id,
+    });
 
     const data = {
       user: ctx.state.user.name || ctx.state.user.login,
@@ -16,8 +23,9 @@ module.exports = {
       }) => ({
         id,
         sum,
-        type,
-        time,
+        type: renderPaymentType(type),
+        date: moment(time).format('L'),
+        time: moment(time).format('LTS'),
       })),
     };
 

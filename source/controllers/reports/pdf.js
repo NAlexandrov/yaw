@@ -7,7 +7,7 @@ const renderPaymentType = require('../../../libs/render-payment-type.js');
 
 moment.locale('ru');
 
-// http://localhost:8000/reports/transactions.xlsx
+// http://localhost:8000/reports/transactions.pdf
 
 module.exports = {
   handler: async (ctx) => {
@@ -25,13 +25,35 @@ module.exports = {
       moment(time).format('LTS'),
     ]));
 
-    const formData = [{
-      name: 'Отчет по транзакциям',
-      data,
-    }];
+    const formData = {
+      content: [
+        {
+          style: 'header',
+          text: 'Отчет по транзакциям',
+        },
+        {
+          style: 'tableExample',
+          table: {
+            widths: [40, '*', 80, 80, 80],
+            body: data,
+          },
+        },
+      ],
+      styles: {
+        header: {
+          fontSize: 18,
+          bold: true,
+          margin: [0, 0, 0, 10],
+          alignment: 'center',
+        },
+        tableExample: {
+          margin: [0, 5, 0, 15],
+        },
+      },
+    };
 
     const opt = {
-      url: 'http://localhost:3333/xlsx',
+      url: 'http://localhost:3333/pdfmake',
       encoding: null,
       json: formData,
     };

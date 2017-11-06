@@ -16,6 +16,7 @@ const mobileToCard = require('./controllers/cards/mobile-to-card.js');
 
 const getTransactionsXLSX = require('./controllers/reports/xlsx.js');
 const getTransactionsDOCX = require('./controllers/reports/docx.js');
+const getTransactionsPDF = require('./controllers/reports/pdf.js');
 
 /**
  * @see {@link https://github.com/koajs/joi-router} for more information
@@ -90,6 +91,11 @@ const routes = [
     method: 'get',
     path: '/reports/transactions.docx',
     ...getTransactionsDOCX,
+  },
+  {
+    method: 'get',
+    path: '/reports/transactions.pdf',
+    ...getTransactionsPDF,
   },
 ];
 

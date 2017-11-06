@@ -69,6 +69,7 @@
     "passport-google-auth": "^1.0.2",
     "passport-google-oauth20": "^1.0.0",
     "passport-yandex": "0.0.3",
+    "pdfmake": "^0.1.33",
     "pm2": "^2.7.2",
     "prop-types": "^15.6.0",
     "rc": "^1.2.2",

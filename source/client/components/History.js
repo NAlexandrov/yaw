@@ -85,7 +85,7 @@ const Icon = styled.div`
   top: 1px;
   right: 10px;
   position: absolute;
-  width: 50px;
+  width: 80px;
   font-size: 18px;
   a {
     color: #666;
@@ -156,6 +156,10 @@ const History = ({ cardHistory }) => {
         <Icon>
           <a href='/reports/transactions.docx'>
             <FontAwesome name='file-word-o' />
+          </a>
+          &nbsp;&nbsp;
+          <a href='/reports/transactions.pdf'>
+            <FontAwesome name='file-pdf-o' />
           </a>
           &nbsp;&nbsp;
           <a href='/reports/transactions.xlsx'>
