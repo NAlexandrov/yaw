@@ -160,11 +160,25 @@ class App extends Component {
   }
 
   /**
+   * Добавление карты
+   * @param {Object} card - Данные карты
+   */
+  addCard(card) {
+    return axios
+      .post('/cards', card)
+      .then(() => axios.get('/cards')
+        .then(({ data }) => {
+          const cardsList = App.prepareCardsData(data);
+          this.setState({ cardsList });
+        }));
+  }
+
+  /**
 	 * Удаление карты
 	 * @param {Number} index Индекс карты
 	 */
   deleteCard(id) {
-    axios
+    return axios
       .delete(`/cards/${id}`)
       .then(() => {
         axios.get('/cards').then(({ data }) => {
@@ -203,6 +217,7 @@ class App extends Component {
             onCardChange={(index) => this.onCardChange(index)}
             isCardsEditable={isCardsEditable}
             isCardRemoving={isCardRemoving}
+            addCard={(card) => this.addCard(card)}
             deleteCard={(index) => this.deleteCard(index)}
             onChangeBarMode={(event, index) => this.onChangeBarMode(event, index)} />
           <CardPane>
@@ -223,6 +238,7 @@ class App extends Component {
           isCardsEditable={isCardsEditable}
           isCardRemoving={isCardRemoving}
           deleteCard={(index) => this.deleteCard(index)}
+          addCard={(card) => this.addCard(card)}
           onChangeBarMode={(event, index) => this.onChangeBarMode(event, index)} />
         <CardPane>
           <Header activeCard={activeCard} user={user} />

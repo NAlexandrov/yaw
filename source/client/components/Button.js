@@ -39,7 +39,6 @@ Button.propTypes = {
 Button.defaultProps = {
   bgColor: 'rgba(0, 0, 0, 0.05)',
   textColor: 'rgba(0, 0, 0, 0.65)',
-  onClick: (e) => { e.prventDefault(); },
 };
 
 export default Button;

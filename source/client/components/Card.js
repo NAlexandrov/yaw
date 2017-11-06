@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 import { Modal } from 'antd';
-import axios from 'axios';
 import { Select, CardEdit } from './';
 
 const CardLayout = styled.div`
@@ -95,22 +94,19 @@ class Card extends Component {
   }
 
   handleOk() {
-    axios
-      .post('/cards', {
-        cardNumber: '4242424242424242',
-        balance: 100000,
-      })
-      .then(() =>
-        axios.post('/cards', {
-          cardNumber: '5555555555554444',
-          balance: 100000,
-        }),
-      )
-      .then(() => {
-        this.setState({
-          addCardModalVisible: false,
-        });
+    const { addCard } = this.props;
+
+    addCard({
+      cardNumber: '4242424242424242',
+      balance: 100000,
+    }).then(() => addCard({
+      cardNumber: '5555555555554444',
+      balance: 100000,
+    })).then(() => {
+      this.setState({
+        addCardModalVisible: false,
       });
+    });
   }
 
   handleCancel() {
@@ -207,6 +203,7 @@ Card.propTypes = {
   isCardsEditable: PropTypes.bool,
   onClick: PropTypes.func,
   onChangeBarMode: PropTypes.func,
+  addCard: PropTypes.func,
 };
 
 export default Card;

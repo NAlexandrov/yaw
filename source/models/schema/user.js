@@ -12,10 +12,6 @@ const userSchema = new Schema({
   email: String,
   google_id: String,
   yandex_id: String,
-  cards: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Card',
-  }],
 });
 
 module.exports = mongoose.model('User', userSchema);

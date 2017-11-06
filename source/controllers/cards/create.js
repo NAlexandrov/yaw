@@ -24,7 +24,7 @@ module.exports = {
   },
 
   handler: async (ctx) => {
-    const card = ctx.request.body;
+    const card = { userId: ctx.state.user.id, ...ctx.request.body };
     const newCard = await ctx.cardsModel.create(card);
     ctx.status = 201;
     ctx.body = newCard;
