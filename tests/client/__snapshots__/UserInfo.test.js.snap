@@ -1,19 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<UserInfo /> should render a button 1`] = `
-<Button
-  bgColor="rgba(0, 0, 0, 0.05)"
-  textColor="rgba(0, 0, 0, 0.65)"
->
-  Войти
-</Button>
-`;
-
 exports[`<UserInfo /> should render an avatar 1`] = `
 <Styled(div)>
-  <Styled(img)
-    src="/assets/avatar.png"
+  <Gravatar
+    default="mm"
+    protocol="//"
+    rating="g"
+    size={42}
   />
   admin
+    
+  <a
+    href="/logout"
+  >
+    <Icon
+      style={
+        Object {
+          "color": "#08c",
+          "fontSize": 16,
+        }
+      }
+      type="logout"
+    />
+  </a>
 </Styled(div)>
 `;

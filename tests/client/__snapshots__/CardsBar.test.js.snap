@@ -19,11 +19,12 @@ exports[`<CardsBar /> should render a cards bar 1`] = `
       onClick={[Function]}
     />
     <Card
+      addCard={[Function]}
       type="new"
     />
   </Styled(div)>
   <Styled(footer)>
-    Yamoney Node School
+    Yet Another Wallet
   </Styled(footer)>
 </Styled(div)>
 `;

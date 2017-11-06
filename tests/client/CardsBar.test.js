@@ -21,6 +21,7 @@ describe('<CardsBar />', () => {
         isCardsEditable={false}
         isCardRemoving={false}
         deleteCard={() => ({})}
+        addCard={() => ({})}
         onChangeBarMode={() => ({})} />);
 
     expect(wrapper).toMatchSnapshot();
