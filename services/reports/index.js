@@ -66,7 +66,8 @@ router.post('/xlsx', koaBody, async (ctx, next) => {
 app.use(router.routes());
 
 const PORT = process.env.PORT || 3333;
-app.listen(PORT, () => {
+
+app.listen(PORT, 'localhost', () => {
   /* eslint no-console:0 max-len:0 */
   console.log(`Service reports started at port: ${PORT}. Environment: ${process.env.NODE_ENV}`);
 });

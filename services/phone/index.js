@@ -41,7 +41,7 @@ app.use(handlers.middleware());
 
 const PORT = process.env.PHONE_SERVICE_PORT || 3334;
 
-app.listen(PORT, () => {
+app.listen(PORT, 'localhost', () => {
   /* eslint no-console:0 max-len:0 */
   console.log(`Service phone started at port: ${PORT}. Environment: ${process.env.NODE_ENV}`);
 });

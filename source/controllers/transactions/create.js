@@ -43,6 +43,7 @@ module.exports = {
     }
 
     transaction.cardId = cardId;
+    transaction.userId = ctx.state.user.id;
 
     const newTransaction = await ctx.transactionsModel.create(transaction);
 

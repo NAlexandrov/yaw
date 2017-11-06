@@ -49,6 +49,7 @@ module.exports = {
 
     const transaction = await ctx.transactionsModel.create({
       cardId,
+      userId: ctx.state.user.id,
       type: 'paymentMobile',
       data: { phoneNumber, ...operator },
       time: new Date().toISOString(),

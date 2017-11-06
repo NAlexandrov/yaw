@@ -9,7 +9,14 @@ const transactionSchema = new Schema({
     type: Number,
     required: true,
   },
-  cardId: Number,
+  cardId: {
+    type: Number,
+    required: true,
+  },
+  userId: {
+    type: Number,
+    required: true,
+  },
   type: String,
   data: Schema.Types.Mixed,
   time: {

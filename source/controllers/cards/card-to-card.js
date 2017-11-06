@@ -40,6 +40,7 @@ module.exports = {
 
     const transaction = await ctx.transactionsModel.create({
       cardId: sourceCard.id,
+      userId: ctx.state.user.id,
       type: 'withdrawCard',
       data: {
         cardNumber: targetCard.cardNumber,
@@ -50,6 +51,7 @@ module.exports = {
 
     await ctx.transactionsModel.create({
       cardId: targetCard.id,
+      userId: ctx.state.user.id,
       type: 'prepaidCard',
       data: {
         cardNumber: sourceCard.cardNumber,

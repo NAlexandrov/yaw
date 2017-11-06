@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 import moment from 'moment';
+import FontAwesome from 'react-fontawesome';
 
 import { Island } from './';
 
@@ -23,8 +24,9 @@ const HistoryTitle = styled.div`
 	padding-left: 12px;
 	color: rgba(0, 0, 0, 0.4);
 	font-size: 15px;
-	line-height: 30px;
-	text-transform: uppercase;
+	line-height: 50px;
+  text-transform: uppercase;
+  position: relative;
 `;
 
 const HistoryContent = styled.div`
@@ -77,6 +79,20 @@ const HistoryItemSum = styled.div`
 	overflow: hidden;
 	text-overflow: ellipsis;
 	font-weight: bold;
+`;
+
+const Icon = styled.div`
+  top: 1px;
+  right: 10px;
+  position: absolute;
+  width: 50px;
+  font-size: 18px;
+  a {
+    color: #666;
+    &:hover {
+      color: #111
+    }
+  }
 `;
 
 const History = ({ cardHistory }) => {
@@ -135,7 +151,18 @@ const History = ({ cardHistory }) => {
 
   return (
     <HistoryLayout>
-      <HistoryTitle>Сегодня</HistoryTitle>
+      <HistoryTitle>
+        Сегодня
+        <Icon>
+          <a href='/reports/transactions.docx'>
+            <FontAwesome name='file-word-o' />
+          </a>
+          &nbsp;&nbsp;
+          <a href='/reports/transactions.xlsx'>
+            <FontAwesome name='file-excel-o' />
+          </a>
+        </Icon>
+      </HistoryTitle>
       {getContent(cardHistory)}
     </HistoryLayout>
   );
