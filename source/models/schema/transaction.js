@@ -4,7 +4,11 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
-const Transaction = mongoose.model('Transaction', {
+const transactionSchema = new Schema({
+  id: {
+    type: Number,
+    required: true,
+  },
   cardId: Number,
   type: String,
   data: Schema.Types.Mixed,
@@ -13,10 +17,6 @@ const Transaction = mongoose.model('Transaction', {
     default: Date.now,
   },
   sum: String,
-  id: {
-    type: Number,
-    required: true,
-  },
 });
 
-module.exports = Transaction;
+module.exports = mongoose.model('Transaction', transactionSchema);

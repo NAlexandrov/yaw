@@ -4,16 +4,11 @@ const { renderToStaticNodeStream } = require('react-dom/server');
 const indexView = require('../views/index.server.js');
 
 async function getData(ctx) {
-  const user = {
-    login: 'samuel_johnson',
-    name: 'Samuel Johnson',
-  };
-
   const cards = await ctx.cardsModel.getAll();
   const transactions = await ctx.transactionsModel.getAll();
 
   return {
-    user,
+    user: ctx.isAuthenticated() ? ctx.state.user : null,
     cards,
     transactions,
   };

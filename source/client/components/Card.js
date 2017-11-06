@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
+import { Modal } from 'antd';
+import axios from 'axios';
 import { Select, CardEdit } from './';
 
 const CardLayout = styled.div`
@@ -26,7 +28,8 @@ const CardLogo = styled.div`
 const CardNumber = styled.div`
 	margin-bottom: 20px;
 	color: ${({ active, textColor }) => (active ? textColor : 'rgba(255, 255, 255, 0.6)')};
-	font-size: 16px;
+  font-size: 15px;
+  white-space: nowrap;
 	font-family: 'OCR A Std Regular';
 `;
 
@@ -45,7 +48,12 @@ const NewCardLayout = styled(CardLayout)`
 	background-repeat: no-repeat;
 	background-position: center;
 	box-sizing: border-box;
-	border: 2px dashed rgba(255, 255, 255, 0.2);
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+  }
 `;
 
 const CardSelect = styled(Select)`
@@ -67,6 +75,7 @@ class Card extends Component {
 
     this.state = {
       activeCardIndex: 0,
+      addCardModalVisible: false,
     };
   }
 
@@ -79,19 +88,64 @@ class Card extends Component {
     this.setState({ activeCardIndex });
   }
 
+  onAddCardClick() {
+    this.setState({
+      addCardModalVisible: true,
+    });
+  }
+
+  handleOk() {
+    axios
+      .post('/cards', {
+        cardNumber: '4242424242424242',
+        balance: 100000,
+      })
+      .then(() =>
+        axios.post('/cards', {
+          cardNumber: '5555555555554444',
+          balance: 100000,
+        }),
+      )
+      .then(() => {
+        this.setState({
+          addCardModalVisible: false,
+        });
+      });
+  }
+
+  handleCancel() {
+    this.setState({
+      addCardModalVisible: false,
+    });
+  }
+
   /**
-	 * Рендер компонента
-	 *
-	 * @override
-	 * @returns {JSX}
-	 */
+   * Рендер компонента
+   *
+   * @override
+   * @returns {JSX}
+   */
   render() {
     const {
       data, type, active, isSingle, onClick, isCardsEditable, onChangeBarMode,
     } = this.props;
+
     if (type === 'new') {
+      const { addCardModalVisible } = this.state;
+
       return (
-        <NewCardLayout />
+        <div>
+          <NewCardLayout onClick={() => this.onAddCardClick()} />
+          <Modal
+            title='Добавление новой карты'
+            visible={addCardModalVisible}
+            onOk={() => this.handleOk()}
+            onCancel={() => this.handleCancel()}
+            cancelText='Отмена'
+            okText='Добавить'>
+            <p>Здесь будет форма. Если сейчас нажать добавить, то добавится тестовая карта</p>
+          </Modal>
+        </div >
       );
     }
 
@@ -119,7 +173,12 @@ class Card extends Component {
     const {
       bgColor, textColor, bankLogoUrl, brandLogoUrl,
     } = theme;
-    const themedBrandLogoUrl = active ? brandLogoUrl : brandLogoUrl.replace(/-colored.svg$/, '-white.svg');
+
+    let themedBrandLogoUrl;
+
+    if (brandLogoUrl) {
+      themedBrandLogoUrl = active ? brandLogoUrl : brandLogoUrl.replace(/-colored.svg$/, '-white.svg');
+    }
 
     return (
       <CardLayout

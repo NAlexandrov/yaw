@@ -2,7 +2,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
-import { Button } from './';
+import Gravatar from 'react-gravatar';
+import { Icon } from 'antd';
 
 const User = styled.div`
 	display: flex;
@@ -11,35 +12,22 @@ const User = styled.div`
 	color: #000;
 `;
 
-const Avatar = styled.img`
-	width: 42px;
-	height: 42px;
-	border-radius: 50%;
-	margin-right: 10px;
-`;
-
-const UserInfo = ({ user }) => {
-  if (user.login) {
-    return (
-      <User>
-        <Avatar src='/assets/avatar.png' />
-        {user.name || user.login}
-      </User>
-    );
-  }
-
-  return <Button>Войти</Button>;
-};
+const UserInfo = ({ user }) => (
+  <User>
+    <Gravatar email={user.email} size={42} default='mm' />
+    {user.name || user.login} &nbsp;
+    <a href='/logout'>
+      <Icon type='logout' style={{ fontSize: 16, color: '#08c' }} />
+    </a>
+  </User>
+);
 
 UserInfo.propTypes = {
   user: PropTypes.shape({
     login: PropTypes.string,
     name: PropTypes.string,
-  }),
-};
-
-UserInfo.defaultProps = {
-  user: {},
+    email: PropTypes.string,
+  }).isRequired,
 };
 
 export default UserInfo;

@@ -3,6 +3,7 @@
 const router = require('koa-joi-router')();
 
 const indexController = require('./controllers/index.js');
+const logoutController = require('./controllers/logout.js');
 const getCardsController = require('./controllers/cards/get-cards.js');
 const createCardController = require('./controllers/cards/create.js');
 const deleteCardController = require('./controllers/cards/delete.js');
@@ -26,6 +27,11 @@ const routes = [
     method: 'get',
     path: '/',
     ...indexController,
+  },
+  {
+    method: 'get',
+    path: '/logout',
+    ...logoutController,
   },
   {
     method: 'get',
