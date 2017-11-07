@@ -19,7 +19,7 @@ module.exports = {
     type: 'json',
     body: {
       cardNumber: Joi.string().creditCard().required(),
-      balance: Joi.number().required(),
+      balance: Joi.number().positive().required(),
     },
   },
 

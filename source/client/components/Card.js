@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 import { Modal } from 'antd';
-import { Select, CardEdit } from './';
+import { Select, CardEdit, Input } from './';
+import loading from './helpers/loading';
 
 const CardLayout = styled.div`
 	position: relative;
@@ -60,6 +61,37 @@ const CardSelect = styled(Select)`
 	margin-bottom: 15px;
 `;
 
+const InputField = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 26px;
+  position: relative;
+  padding-left: 150px;
+`;
+
+const Label = styled.div`
+  font-size: 15px;
+  color: #000;
+  position: absolute;
+  left: 20px;
+`;
+
+const InputCardNumber = styled(Input)`
+  width: 52px;
+  background-color: #fff;
+  color: #000;
+  border-color: #ddd;
+
+  &:focus {
+    outline: none;
+    border-color: #bbb;
+  }
+`;
+
+const InputBalance = styled(InputCardNumber)`
+  width: 284px;
+`;
+
 /**
  * Карта
  */
@@ -75,6 +107,11 @@ class Card extends Component {
     this.state = {
       activeCardIndex: 0,
       addCardModalVisible: false,
+      card1: '',
+      card2: '',
+      card3: '',
+      card4: '',
+      balance: '',
     };
   }
 
@@ -90,23 +127,58 @@ class Card extends Component {
   onAddCardClick() {
     this.setState({
       addCardModalVisible: true,
+      card1: '',
+      card2: '',
+      card3: '',
+      card4: '',
+      balance: '',
     });
+  }
+
+  onChangeInput(event) {
+    if (!event) {
+      return;
+    }
+
+    const { name, value } = event.target;
+
+    this.setState({
+      [name]: value,
+    });
+  }
+
+  onChangeCardNumber(event) {
+    if (!event) {
+      return;
+    }
+
+    const { value } = event.target;
+
+    if (value.length > 4) {
+      // console.log(this.card2);
+    } else {
+      this.onChangeInput(event);
+    }
   }
 
   handleOk() {
     const { addCard } = this.props;
+    const {
+      card1, card2, card3, card4, balance,
+    } = this.state;
+    const cardNumber = `${card1}${card2}${card3}${card4}`;
+
+    const hide = loading('Подождите, пожалуйста...');
 
     addCard({
-      cardNumber: '4242424242424242',
-      balance: 100000,
-    }).then(() => addCard({
-      cardNumber: '5555555555554444',
-      balance: 100000,
-    })).then(() => {
+      cardNumber,
+      balance,
+    }).then(() => {
+      hide();
       this.setState({
         addCardModalVisible: false,
       });
-    });
+    }).catch(() => hide());
   }
 
   handleCancel() {
@@ -139,7 +211,65 @@ class Card extends Component {
             onCancel={() => this.handleCancel()}
             cancelText='Отмена'
             okText='Добавить'>
-            <p>Здесь будет форма. Если сейчас нажать добавить, то добавится тестовая карта</p>
+            <form>
+              <InputField>
+                <Label>Номер карты</Label>
+                <InputCardNumber
+                  ref={(input) => { this.card1 = input; }}
+                  type='number'
+                  name='card1'
+                  required='required'
+                  value={this.state.card1}
+                  min='0'
+                  max='9999'
+                  maxlength='4'
+                  autoFocus='autoFocus'
+                  onChange={(event) => this.onChangeCardNumber(event)} />
+                &nbsp;&nbsp;&mdash;&nbsp;&nbsp;
+                <InputCardNumber
+                  ref={(input) => { this.card2 = input; }}
+                  type='number'
+                  name='card2'
+                  required='required'
+                  value={this.state.card2}
+                  min='0'
+                  max='9999'
+                  maxlength='4'
+                  onChange={(event) => this.onChangeCardNumber(event)} />
+                &nbsp;&nbsp;&mdash;&nbsp;&nbsp;
+                <InputCardNumber
+                  type='number'
+                  name='card3'
+                  required='required'
+                  value={this.state.card3}
+                  min='0'
+                  max='9999'
+                  maxlength='4'
+                  onChange={(event) => this.onChangeCardNumber(event)} />
+                &nbsp;&nbsp;&mdash;&nbsp;&nbsp;
+                <InputCardNumber
+                  type='number'
+                  name='card4'
+                  required='required'
+                  value={this.state.card4}
+                  min='0'
+                  max='9999'
+                  maxlength='4'
+                  onChange={(event) => this.onChangeCardNumber(event)} />
+              </InputField>
+              <InputField>
+                <Label>Баланс</Label>
+                <InputBalance
+                  type='number'
+                  name='balance'
+                  required='required'
+                  min='0'
+                  value={this.state.balance}
+                  placeholder='Нужно больше золота'
+                  placeholderColor='#666'
+                  onChange={(event) => this.onChangeInput(event)} />
+              </InputField>
+            </form>
           </Modal>
         </div >
       );

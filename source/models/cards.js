@@ -60,6 +60,10 @@ class Cards extends MongoModel {
     const card = await this.getById(id);
     const newBalance = Number(card.balance) - Number(sum);
 
+    if (newBalance < 0) {
+      throw new ApplicationError('No money');
+    }
+
     await this._update({ id }, { balance: newBalance });
   }
 

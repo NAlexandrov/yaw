@@ -14,6 +14,10 @@ const StyledInput = styled.input`
 	line-height: 1.5;
   color: ${({ textColor }) => textColor};
 
+  &:focus {
+    outline: none;
+  }
+
   ::-webkit-input-placeholder {
     color: ${({ placeholderColor }) => placeholderColor};
     opacity: 0.5;

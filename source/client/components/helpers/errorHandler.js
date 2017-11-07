@@ -23,7 +23,13 @@ function errorHandler(err) {
     };
   }
 
-  return showError(err);
+  showError(err);
+
+  if (err instanceof Error) {
+    throw err;
+  }
+
+  return null;
 }
 
 export default errorHandler;

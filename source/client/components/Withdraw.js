@@ -79,18 +79,34 @@ class Withdraw extends Component {
     }
 
     const { selectedCard, sum } = this.state;
-    const { activeCard } = this.props;
+    const { activeCard, inactiveCardsList } = this.props;
+
+    let selectedCardId = selectedCard.id;
+
+    const isFound = inactiveCardsList.find((v) => v.id === selectedCard.id);
+
+    if (!isFound) {
+      this.setState({
+        selectedCard: inactiveCardsList[0],
+      });
+
+      selectedCardId = inactiveCardsList[0].id;
+    }
 
     const isNumber = !isNaN(parseFloat(sum)) && isFinite(sum);
     if (!isNumber || sum <= 0) {
       return errorHandler('Введите корректную сумму для вывода с карты');
     }
 
+    if (activeCard.balance < Number(sum)) {
+      return errorHandler('У вас недостаточно средств');
+    }
+
     const options = {
       method: 'post',
       url: `/cards/${activeCard.id}/transfer`,
       data: {
-        target: selectedCard.id,
+        target: selectedCardId,
         sum,
       },
     };
@@ -121,6 +137,7 @@ class Withdraw extends Component {
           <Card type='select' data={inactiveCardsList} />
           <InputField>
             <SumInput
+              textColor='#000'
               name='sum'
               type='number'
               min='1'

@@ -132,7 +132,6 @@ class PrepaidContract extends Component {
     }
 
     if (selectedCard.balance < Number(sum)) {
-      console.log(selectedCard);
       return errorHandler('У вас недостаточно средств');
     }
 
