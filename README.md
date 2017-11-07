@@ -17,11 +17,11 @@ P.S. Приложение работает с базой данных MongoDB. �
 ### Возможности приложения
 
 1. Проведение операций по добавленным картам.
-![](http://yet-another-wallet.herokuapp.com/screenshots/index.png)
+![](https://raw.githubusercontent.com/NAlexandrov/yaw/master/public/screenshots/index.png)
 2. Добавление новых карт.
-![](http://yet-another-wallet.herokuapp.com/screenshots/newcard.png)
+![](https://raw.githubusercontent.com/NAlexandrov/yaw/master/public/screenshots/newcard.png)
 3. Определение оператора телефона на который было осуществлено пополнение.
-![](http://yet-another-wallet.herokuapp.com/screenshots/phone.png)
+![](https://raw.githubusercontent.com/NAlexandrov/yaw/master/public/screenshots/phone.png)
 4. Выгрузка отчетов по транзакциям в форматы DOCX, PDF, XLSX.
 5. Авторизация через социальные сети.
 6. Настроен CI с помощью [Travis](https://travis-ci.org) и автоматический деплой на [Heroku](https://www.heroku.com/)
