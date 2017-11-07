@@ -3,6 +3,7 @@ public/*
 !public/assets/
 !public/fonts/
 !public/favicon.ico
+!public/screenshots
 source/views/*
 !source/views/*.src.js
 coverage/*
