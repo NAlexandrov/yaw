@@ -1,7 +1,6 @@
 # Yet Another Wallet
 [![Build Status](https://travis-ci.org/NAlexandrov/yaw.svg?branch=master)](https://travis-ci.org/NAlexandrov/yaw)
 [![codecov](https://codecov.io/gh/NAlexandrov/yaw/branch/master/graph/badge.svg)](https://codecov.io/gh/NAlexandrov/yaw)
-[![Maintainability](https://api.codeclimate.com/v1/badges/af9bb8a3588c8f708bc9/maintainability)](https://codeclimate.com/github/NAlexandrov/yaw/maintainability)
 [![dependencies Status](https://david-dm.org/NAlexandrov/yaw/status.svg)](https://david-dm.org/NAlexandrov/yaw)
 
 Данное приложение было специально создано для [Школы Node.js](https://academy.yandex.ru/events/frontend/spb-2017/) в рамках хакатона.
